@@ -1,0 +1,56 @@
+/*prebooth*/
+
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  margin-top: 15vh;
+}
+
+.textSection {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.textSection p {
+  margin: 0;
+  padding: 8px 0;
+}
+
+.continue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 170px;
+  height: 50px;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  color: black;
+  margin-top: 40px;
+}
+
+.continue h1 {
+  font-size: 20px;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 500;
+}
+
+.continue:hover {
+  background-color: #d1eac4;
+  color: rgb(0, 0, 0);
+}

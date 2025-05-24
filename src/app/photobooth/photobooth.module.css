@@ -1,0 +1,154 @@
+.page h1 {
+  font-weight: lighter;
+  font-family: "Times New Roman", Times, serif;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 35px;
+  height: 10vh;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  font-size: 2rem;
+  background-color: #f9f9f9;
+  color: #333;
+  margin-top: -55px;
+}
+
+.start {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 160px;
+  padding: 12px 0;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  margin-top: 20px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.start h1 {
+  margin: 0;
+  color: black;
+  width: 160px;
+  height: 30px;
+  font-size: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.start:hover {
+  background-color: #d1eac4;
+  color: white;
+}
+
+.cameraFrame {
+  display: inline-block;
+  border: 4px solid black;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  margin-left: -250px;
+  transform: translateY(-20px);
+}
+
+.cameraFrame > * {
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+.topBar {
+  max-width: 688px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  display: flex;
+  z-index: 10;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.boxButton {
+  border: 1px solid black;
+  background: white;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.boxButton:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown {
+  border: 1px solid black;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.leftGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.mainContent {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-right: 30px; 
+  transform: translateX(-300px); 
+}
+
+.chooseText {
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.filterBox {
+  background-color: #d1eac4;
+  padding: 25px;
+  padding-top: 30px;
+  font-size: 16px;
+  width: 180px;
+  min-height: 300px;
+  text-align: center;
+}
+
+.filterBox h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.filterBox p {
+  margin: 25px 0; 
+  cursor: pointer;
+}
+
+.filterBox p:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,97 @@
+/* home page */
+
+.page h1 {
+  font-weight: lighter;
+  font-family: "Times New Roman", Times, serif;
+  position: relative;
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  align-items: center; /* centers vertically */
+  font-size: 35px;
+  height: 10vh;
+}
+
+.page p {
+  font-weight: lighter;
+  font-family: "Times New Roman", Times, serif;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 0.01px;
+}
+
+.logoImage {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+  height: 50vh;
+  text-align: center;
+}
+
+.start {
+  position: absolute;
+  bottom: 190px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 160px;
+  padding: 12px 0;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  margin-top: 20px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.start h1 {
+  margin: 0;
+  color: black;
+  width: 160px;
+  height: 30px;
+  font-size: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.start:hover {
+  background-color: #d1eac4;
+  color: white;
+}
+
+.threeImages {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.06px;
+  margin-top: 193px;
+  padding-bottom: 20px;
+}
+
+.instaImages,
+.linkedinImages,
+.youtubeImages {
+  height: 40px;
+  width: 45px;
+  object-fit: contain;
+}
+
+.threeImages {
+  transition: transform 0.3s ease;
+}
+
+.instaImages:hover {
+  transform: scale(1.2);
+}
+
+.linkedinImages:hover {
+  transform: scale(1.2);
+}
+
+.youtubeImages:hover {
+  transform: scale(1.2);
+}

@@ -1,0 +1,14 @@
+/* camera style */
+
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.videoFeed {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 10px;
+}
