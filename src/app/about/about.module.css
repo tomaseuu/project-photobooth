@@ -48,4 +48,8 @@
   margin-right: 250px;
   margin-bottom: -15px;
   transform: scale(0.8);
+  position: relative;
+  right: 100px;
+  bottom: 10px;
+
 }

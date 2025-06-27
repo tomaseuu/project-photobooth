@@ -28,9 +28,9 @@ export default function About() {
         <Image
           src="/aboutpic.png"
           alt="about picture"
-          width={380}
-          height={571}
-          className={styles.flowerImage}
+          width={600}
+          height={600}
+          className={styles.about}
         />
       </div>
     </div>

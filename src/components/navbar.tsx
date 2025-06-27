@@ -36,9 +36,9 @@ export default function Navbar() {
           <Image
             src="/navflower.png"
             alt="nav flower Logo"
-            width={200}
-            height={360}
-            className={styles.flowerImage}
+            width={340}
+            height={440}
+            className={styles.flower}
           />
         </div>
       </nav>
