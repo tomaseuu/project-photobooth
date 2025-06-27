@@ -19,6 +19,15 @@ export default function Home() {
           className={styles.leafImage}
         />
       </div>
+      <div className={styles.homepageImage}>
+        <Image
+        src = "/vines.PNG"
+        alt="Vines"
+        width={310}
+        height={310}
+        className={styles.vineImage}
+        />
+      </div>
       <Link href="/prebooth" className={styles.start}>
         <h1>START</h1>
       </Link>

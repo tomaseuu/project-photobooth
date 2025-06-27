@@ -4,8 +4,27 @@ import Camera from "../../components/camera";
 import styles from "./photobooth.module.css";
 import Link from "next/link";
 import { useEffect } from "react";
+import { useRef } from "react";
 
 export default function Page() {
+// go over all this again.
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+
+  const handleButtonClick = () => {
+    if(fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
+  };
+
+
   return (
     <div className={styles.page}>
       <h1>LUMA LEAF</h1>
@@ -13,7 +32,15 @@ export default function Page() {
       <div className={styles.topBar}>
         <div className={styles.leftGroup}>
           <button className={styles.boxButton}>Camera</button>
-          <button className={styles.boxButton}>Upload Images</button>
+          <button className={styles.boxButton} onClick={handleButtonClick}>Upload Images</button>
+          <input 
+            type="file" 
+            accept=".png,.jpg,.jpeg"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+          />
+          
         </div>
         <select className={styles.dropdown}>
           <option>Select Countdown</option>
