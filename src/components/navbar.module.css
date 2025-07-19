@@ -33,7 +33,9 @@
   top: 0;
   left: -100vh;
   height: 100vh;
-  width: 15%;
+  width: 20vw;
+  min-width: 180px;
+  max-width: 300px;
   background-color: #d1eac4;
   display: flex;
   flex-direction: column;
@@ -47,7 +49,7 @@
 .menu a {
   text-decoration: none;
   color: black;
-  font-size: 27px;
+  font-size: 20px;
   letter-spacing: 1px;
   font-family: Helvetica, sans-serif;
   text-align: center;
@@ -63,13 +65,14 @@
 }
 
 .flowerImage {
-  margin-top: auto;
+  margin-top: 60px;
+  margin-left: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 100%;
+  width: 60%;
+  padding: 1rem 0;
   position:relative;
-  top: 28px;
-  right: 18px;
-  padding-bottom: 1rem;
+  max-width: 150px;
+  height: auto;
 }

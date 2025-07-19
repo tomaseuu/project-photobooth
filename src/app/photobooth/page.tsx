@@ -69,7 +69,7 @@ export default function Page() {
         </div>
       </div>
 
-      <Link href="/prebooth" className={styles.start}>
+      <Link href="/photostrip" className={styles.start}>
         <h1>START</h1>
       </Link>
     </div>
