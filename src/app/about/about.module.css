@@ -1,3 +1,8 @@
+/* ABOUT MODULE CSS */
+
+
+
+/* Page Layout */
 .page {
   display: flex;
   align-items: center;
@@ -5,6 +10,10 @@
   padding: 50px;
   gap: 50px;
 }
+
+/* ================================= */
+
+/* Left : Text Section */
 
 .textSection {
   width: 380px;
@@ -38,6 +47,9 @@
   margin-bottom: 20px;
 }
 
+/* ================================= */
+
+/* Right: Image */
 
 .aboutImage{
   width: 380px;

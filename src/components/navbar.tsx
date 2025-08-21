@@ -9,6 +9,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   return (
     <header className={styles.navbar}>
+
       {/* Hamburger icon */}
       <div className={styles.hamburger} onClick={() => setOpen(!open)}>
         <span />

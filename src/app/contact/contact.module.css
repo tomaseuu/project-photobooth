@@ -1,19 +1,28 @@
-/* contact */
+/* CONTACT MODULE CSS */
+
+
+/* Contact Page */
+
 .contactPage {
-  color: rgb(251, 251, 251);
-  background-color: #ffffff;
+  position: relative;
+  width: 100%;
   min-height: 50vh;
-  overflow: hidden;
+  margin: 0;
   padding-top: 60px;
   padding-bottom: 20px;
-  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  position: relative;
-  width: 100%;
+  color: rgb(251, 251, 251);
+  background-color: #ffffff;
+  overflow: hidden;
 }
+
+
+/* ================================= */
+
+/* Heading */
 
 .contactName h1 {
   font-size: 30px;
@@ -25,6 +34,43 @@
   padding: 5px;
 }
 
+/* ================================= */
+
+/* Form Wrapper */
+
+.form {
+  position: relative;
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 40px 120px 50px;
+  max-height: 80vh;
+  overflow: hidden;
+  border: 1.7px solid #000000;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.row {
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ================================= */
+
+
+/* Label & Field Colors */
+
 .contactPage label,
 .contactPage input,
 .contactPage textarea {
@@ -35,6 +81,10 @@
   font-family: Arial, Helvetica, sans-serif;
   margin-bottom: 8px;
 }
+
+/* ================================= */
+
+/* Inputs / Textarea */
 
 .input[type="text"],
 .input[type="email"],
@@ -64,7 +114,10 @@
   padding: 25px 0;
 }
 
-/* submit button */
+/* ================================= */
+
+/* Submit Button */
+
 .input[type="submit"] {
   position: absolute;
   bottom: 20px;
@@ -83,30 +136,4 @@
   background-color: #b7ceab;
 }
 
-.form {
-  width: 90%;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 60px 40px 120px 50px;
-  max-height: 80vh;
-  overflow: hidden;
-  border: 1.7px solid #000000;
-  box-shadow: none;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: visible;
-}
-
-.row {
-  display: flex;
-  gap: 30px;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.inputGroup {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
+/* ================================= */

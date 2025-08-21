@@ -1,17 +1,23 @@
-/* home page */
+/* HOME MODULE CSS */
 
+
+/* Page Layout */
 .page {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   min-height: 100vh;
   padding: 4vh 5vw;
-  position: relative;
   overflow-x: hidden;
   overflow-y: hidden;
 
 }
+
+/* ================================= */
+
+/* Header */
 
 .header {
   display: flex;
@@ -21,11 +27,11 @@
 }
 
 .header h1 {
-  font-size: 2.5rem;;
-  font-weight: lighter;
-  font-family: "Times New Roman", Times, serif;
-  text-align: center;
   margin: 0;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: lighter;
+  font-size: 2.5rem;
+  text-align: center;
 }
 
 .page p {
@@ -36,7 +42,9 @@
   margin: 0;
 }
 
-/* vine image */
+/* ================================= */
+
+/* Images */
 
 .homepageImage {
   position: absolute;
@@ -53,24 +61,25 @@
   height: auto;
 }
 
-/* center content */
+/* ================================= */
+
+/* Center Content (Logo + Start) */
 
 .centerContent{
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 3vh;
   flex-grow: 1;
-  justify-content: center;
   margin-top: 5vh;
-
 }
 
 .logoImage {
  width: 25vw;
  max-width: 400px;
  margin: 20px auto;
- min-width: 200px;
+ min-width: 300px;
 }
 
 .leafImage{
@@ -78,9 +87,9 @@
   height: auto;
 }
 
+/* ================================= */
 
-/* start button */
-
+/* START Button */
 
 .start {
   width: 30vw;
@@ -89,18 +98,20 @@
   padding: 1em 0;
   margin: 3vh 0;
   border: 2px solid black;
+  color: inherit;
+  text-decoration: none;
   text-align: center;
   cursor: pointer;
-  text-decoration: none;
-  color: inherit;
   transition: background-color 0.3s ease;
 }
 
 .start h1 {
   margin: 0;
-  color: black;
-  font-size: 1.5rem;
   font-family: Arial, Helvetica, sans-serif;
+  font-weight: lighter;
+  font-size: 1.5rem;
+  color: black;
+  
 }
 
 .start:hover {
@@ -108,7 +119,9 @@
   color: white;
 }
 
-/* social icons */
+/* ================================= */
+
+/* Social Icons */
 
 .threeImages {
   display: flex;
@@ -134,3 +147,5 @@
 .youtubeImages:hover {
   transform: scale(1.2);
 }
+
+/* ================================= */

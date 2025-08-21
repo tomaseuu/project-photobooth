@@ -1,3 +1,8 @@
+/* NAVBAR MODULE CSS */
+
+
+/* Navbar */
+
 .navbar {
   position: fixed;
   top: 0;
@@ -7,6 +12,9 @@
   z-index: 999;
 }
 
+/* ================================= */
+
+/* Hamburger */
 .hamburger {
   position: fixed;
   top: 20px;
@@ -28,13 +36,17 @@
   transition: 0.3s;
 }
 
+/* ================================= */
+
+/* Slide-in Menu */
+
 .menu {
   position: fixed;
   top: 0;
   left: -100vh;
   height: 100vh;
-  width: 20vw;
-  min-width: 180px;
+  width: 15vw;
+  min-width: 210px;
   max-width: 300px;
   background-color: #d1eac4;
   display: flex;
@@ -46,10 +58,14 @@
   transition: left 0.5s ease-in-out;
 }
 
-.menu a {
+.show {
+  left: 0;
+}
+
+.menu a {                 /* menu links */
   text-decoration: none;
   color: black;
-  font-size: 20px;
+  font-size: 25px;
   letter-spacing: 1px;
   font-family: Helvetica, sans-serif;
   text-align: center;
@@ -60,19 +76,22 @@
   transform: scale(1.05);
 }
 
-.show {
-  left: 0;
-}
+/* ================================= */
+
+/* Image */
 
 .flowerImage {
-  margin-top: 60px;
-  margin-left: 10px;
+  position:relative;
   display: flex;
   justify-content: center;
   align-items: center;
+
   width: 60%;
-  padding: 1rem 0;
-  position:relative;
-  max-width: 150px;
   height: auto;
+  max-width: 150px;
+  min-width: 5px;
+
+  margin-top: 60px;
+  margin-left: 10px;
+  padding: 1rem 0;
 }

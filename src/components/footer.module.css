@@ -1,4 +1,7 @@
-/* CSS for footer */
+/* FOOTER MODULE CSS */
+
+/* Footer */
+
 .footer {
   display: flex;
   justify-content: center;
@@ -22,3 +25,5 @@
 .footer a:hover {
   text-decoration: underline;
 }
+
+/* ================================= */

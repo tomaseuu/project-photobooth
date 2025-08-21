@@ -27,9 +27,8 @@ export default function Home() {
           <Image
             src="/leaf.PNG"
             alt="Leaf Logo"
-            layout="responsive"
-            width={1}
-            height={1}
+            width={300}
+            height={300}
             className={styles.leafImage} />
         </div>
 
@@ -47,8 +46,8 @@ export default function Home() {
           <Image
             src="/instagram.PNG"
             alt="Instagram Logo"
-            width={15}
-            height={10}
+            width={50}
+            height={50}
             className={styles.instaImages} />
         </a>
         <a
@@ -59,8 +58,8 @@ export default function Home() {
           <Image
             src="/linkedin.PNG"
             alt="LinkedIn Logo"
-            width={50}
-            height={50}
+            width={60}
+            height={60}
             className={styles.linkedinImages} />
         </a>
         <a
