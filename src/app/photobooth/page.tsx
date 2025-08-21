@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./photobooth.module.css";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import CameraCanvas, { CameraHandle } from "../../components/camera";
 
 export default function Page() {
@@ -10,13 +10,28 @@ export default function Page() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);     // ref to the hidden <input type ="file"
   const cameraRef = useRef<CameraHandle>(null);                   // ref to the camera child
 
+
+  const [countdown, setCountdown] = useState<string>("");
+  
   const handleButtonClick = () => fileInputRef.current?.click();  // open file picker by clicking hidden input
 
   // when a file is chosen, grab the first one
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
     const file = event.target.files?.[0];
     if (file) console.log("Selected file:", file);
+    event.target.value = "";
   };
+
+
+  const handleStart = () => {
+    if (!countdown) {
+      alert("Please select a countdown first.");
+      return;
+    }
+    if (countdown === "5") cameraRef.current?.start5();
+    else if (countdown === "10") cameraRef.current?.start10();
+    else cameraRef.current?.start3();
+  }
 
   return (
     
@@ -41,8 +56,13 @@ export default function Page() {
             />
           </div>
           {/* Select Countdown Dropdown */}
-          <select className={styles.dropdown}>
-            <option>Select Countdown</option>
+          <select 
+            className={styles.dropdown}
+            value={countdown}
+            onChange={(e) => setCountdown(e.target.value)}
+            aria-label="Countdown"
+          >
+            <option value="">Select Countdown</option>
             <option value="3">3 seconds</option>
             <option value="5">5 seconds</option>
             <option value="10">10 seconds</option>
@@ -73,7 +93,7 @@ export default function Page() {
           {/* Start Button */}
             <button
               className={styles.start}
-              onClick={() => cameraRef.current?.startSession()}>
+              onClick={handleStart}>
               START
             </button>
           </div>

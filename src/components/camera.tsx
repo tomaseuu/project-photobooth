@@ -12,8 +12,12 @@ import styles from "./camera.module.css";
 
 {/* Type: what the parent can call in photobooth page */}
 export type CameraHandle = {
-  startSession: () => Promise<void>;  
+  start3: () => Promise<void>;
+  start5: () => Promise<void>;
+  start10: () => Promise<void> 
 };
+
+
 
 {/* Components */}
 const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
@@ -41,16 +45,21 @@ const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
   };
   
   {/* Start Session */}
-  const startSession = async () => {
+  const runSession = async (seconds: number) => {
     setPhotos([]);                                                
     for (let i = 0; i < 4; i++) {                                 
-      await new Promise((r) => setTimeout(r, 3000));              // wait 3 seconds for now and then capture ( FOR NOW )
+      await new Promise((r) => setTimeout(r, seconds * 1000));              // wait 3 seconds for now and then capture ( FOR NOW )
       takePhoto();
     }
   };
+  
+  const start3 = () => runSession(3);
+  const start5 = () => runSession(5);
+  const start10 = () => runSession(10);
 
   // API to parent
-  useImperativeHandle(ref, () => ({ startSession }));
+  useImperativeHandle(ref, () => ({ start3, start5, start10}));
+
   {/* Camera Stream  - show live camera*/}
   useEffect(() => {
     (async () => {
@@ -73,8 +82,10 @@ const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
         playsInline 
         className={styles.video} 
       />
-      <canvas ref={canvasRef} className={styles.canvas} />
-
+      <canvas 
+        ref={canvasRef} 
+        className={styles.canvas} 
+      />
       {/* Thumbnails of captured photos */}
       <div className={styles.photoStrip}>
         {photos.map((p, i) => (
