@@ -1,7 +1,7 @@
 /* CAMERA MODULE CSS */
 
 
-/* Camera COntainer */
+/* Camera Container */
 
 .container {
   position: relative;
@@ -40,4 +40,48 @@
   height: auto;
   border: 2px solid black;
   border-radius: 8px;
+}
+
+/* ================================= */
+
+/* Overaly For Countdown Numbers */
+.overlay {
+  position: absolute;     
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;         
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 24px 14px 0 0;
+  z-index: 1;             /* make sure it’s above the video */
+}
+
+.countText {
+  font-size: 60px;        
+  font-weight: 800;
+  color: #fff;
+  margin-top: 12px;
+}
+
+/* ================================= */
+
+/* Flash overlay (white blink) */
+.flashCover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  opacity: 0;
+  transition: opacity 180ms ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+
+.showFlash {
+  opacity: 1;
 }
