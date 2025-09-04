@@ -190,3 +190,9 @@
 }
 
 /* ================================= */
+
+/* Shows what filters are active */
+.active {
+  text-decoration: underline;
+  font-weight: 700;
+}

@@ -14,18 +14,43 @@ import React, {
 } from "react";
 import styles from "./camera.module.css";
 
+
+/** Filter keys */
+export type FilterKey =
+  | "none"
+  | "goldenHour"
+  | "nostalgia"
+  | "frosted"
+  | "leafyLight"
+  | "sepiaSage"
+  | "polaroidPop";
+
 {/* Type: what the parent can call in photobooth page */}
 export type CameraHandle = {
   start3: () => Promise<string[]>;      // takes 4 photos, 3 secs apart, return photos
   start5: () => Promise<string[]>;      // same, 5s apart
   start10: () => Promise<string[]>;     // same, 10s apart
   cancel: () => void;
-  isRunning: () => boolean;
 };
 
+type Props = {
+  filter: FilterKey;
+};
+
+const cssFor = (f: FilterKey): string => {
+  switch (f) {
+    case "goldenHour": return "brightness(1.05) contrast(1.05) saturate(1.25) sepia(0.25) hue-rotate(10deg)";
+    case "nostalgia":  return "sepia(0.85) contrast(0.95) brightness(1.05)";
+    case "frosted":    return "brightness(1.1) contrast(0.9) saturate(0.8) hue-rotate(180deg)";
+    case "leafyLight": return "saturate(1.1) hue-rotate(60deg)";
+    case "sepiaSage":  return "sepia(0.6) hue-rotate(25deg) saturate(1.1)";
+    case "polaroidPop":return "contrast(1.2) brightness(1.05) saturate(1.25)";
+    default:           return "none";
+  }
+};
 
 {/* Components */}
-const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
+const CameraCanvas = forwardRef<CameraHandle, Props>(({ filter }, ref) => {
   const [photos, setPhotos] = useState<string[]>([]);         // list of captured images (data URLs)
   const [count, setCount] = useState<number | null>(null); 
   const [flash, setFlash] = useState(false);
@@ -34,6 +59,7 @@ const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
   const videoRef = useRef<HTMLVideoElement>(null);            // <video> DOM node
   const canvasRef = useRef<HTMLCanvasElement>(null);          // <canvas> DOM node
   const shutterRef = useRef<HTMLAudioElement | null>(null);
+  const cancelRef = useRef(false);
 
   // prepare shutter sounds
   useEffect(() => {
@@ -46,12 +72,13 @@ const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
   {/* Helper: Show numbers each second */}
   const doCountdown = async (seconds: number) => {
     for (let n = seconds; n >= 1; n--) {
-      if (!runningRef.current)
-        break;
+      if (cancelRef.current)
+        return false;
       setCount(n);
       await new Promise((r) => setTimeout(r, 1000));
     }
     setCount(null); // hide number right before snapping
+    return true;
   };
   
 
@@ -62,6 +89,7 @@ const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
     if (!video || !canvas)
       return null;
 
+    // flash + click
     setFlash(true);
     shutterRef.current && (shutterRef.current.currentTime = 0);
     shutterRef.current?.play().catch(() => {});
@@ -74,7 +102,10 @@ const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
     if (!ctx)
       return null;
 
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);    // copy current frame
+    ctx.filter = cssFor(filter);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.filter = "none";
+
     const png = canvas.toDataURL("image/png");                  // canvas -> PNG string
     setPhotos((prev) => [...prev, png]);                        // save in list
     return png;
@@ -82,43 +113,32 @@ const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
 
   {/* Start Session - run a full session: 4 photos, wait N seconds between each */}
   const runSession = async (seconds: number): Promise<string[]> => {
-    if (runningRef.current)
-      return[];
-    runningRef.current = true;
-    
+    cancelRef.current = false;
     setPhotos([]);                                                // clear old photos from the UI
     const shots: string[] =[]; 
     
-    try{
-      for (let i = 0; i < 4; i++) {                                 
-        await doCountdown(seconds);       // show 5... 4.... 3... 2... 1.. etc
-        if(!runningRef.current)
-          break;
-        const png = takePhoto();          // then snap
-        if(png) shots.push(png);
-      }
-      return shots;   
-    } finally {
-      runningRef.current = false;
-      setCount(null);
-      setFlash(false);
-    }                                     
+    for (let i = 0; i < 4; i++) {                             
+      const ok = await doCountdown(seconds);
+      if (!ok || cancelRef.current)
+        break;
+      const png = takePhoto();          // then snap
+      if(png) 
+        shots.push(png);
+    }
+    return shots;                              
   };
   
+  const start3 = () => runSession(3);
+  const start5 = () => runSession(5);
+  const start10 = () => runSession(10);
   const cancel = () => {
-    runningRef.current = false;
+    cancelRef.current = true;
     setCount(null);
     setFlash(false);
   };
   
   // API to parent
-  useImperativeHandle(ref, () => ({
-    start3: () => runSession(3),
-    start5: () => runSession(5),
-    start10: () => runSession(10),
-    cancel,
-    isRunning: () => runningRef.current,
-  }));
+  useImperativeHandle(ref, () => ({ start3, start5, start10, cancel }));
 
   {/* Camera Stream  - show live camera */}
   useEffect(() => {
@@ -144,6 +164,7 @@ const CameraCanvas = forwardRef<CameraHandle>((_, ref) => {
         autoPlay 
         playsInline 
         className={styles.video} 
+        style={{ filter: cssFor(filter) }}
       />
       <canvas 
         ref={canvasRef} 

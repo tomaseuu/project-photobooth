@@ -3,7 +3,7 @@
 import styles from "./photobooth.module.css";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import CameraCanvas, { CameraHandle } from "../../components/camera";
+import CameraCanvas, { CameraHandle, FilterKey } from "../../components/camera";
 
 export default function Page() {
   const router = useRouter();
@@ -13,6 +13,7 @@ export default function Page() {
 
   const [countdown, setCountdown] = useState<string>("");
   const [running, setRunning] = useState(false);
+  const [filter, setFilter] = useState<FilterKey>("none");
 
   
   const handleButtonClick = () => fileInputRef.current?.click();  // open file picker by clicking hidden input
@@ -88,7 +89,7 @@ export default function Page() {
         {/* Top Controls */}
         <div className={styles.topBar}>
           <div className={styles.leftGroup}>
-            <button className={styles.boxButton} disabled={running}>Camera</button>
+            <button className={styles.boxButton} disabled={running} onClick={() => setFilter("none")}>Camera</button>
             <button className={styles.boxButton} onClick={handleButtonClick} disabled={running}>
               Upload Images
             </button>
@@ -121,21 +122,45 @@ export default function Page() {
           {/* Left: Filters */}
           <div className={styles.filters}>
             <p className={styles.chooseText}>choose a filter!</p>
-            <div className={styles.filterBox}>
-              <h2>Filters</h2>
-              <p>Golden Hour</p>
-              <p>Nostalgia</p>
-              <p>Frosted</p>
-              <p>Leafy Light</p>
-              <p>Sepia Sage</p>
-              <p>Polaroid Pop</p>
-            </div>
+              <div className={styles.filterBox}>
+                <h2>Filters</h2>
+                <p
+                  onClick={() => !running && setFilter("none")}
+                  className={filter === "none" ? styles.active : ""}
+                >
+                  Normal
+                </p>
+                <p onClick={() => setFilter("goldenHour")}
+                  className={filter === "goldenHour" ? styles.active : ""}>
+                  Golden Hour
+                </p>
+                <p onClick={() => setFilter("nostalgia")}
+                  className={filter === "nostalgia" ? styles.active : ""}>
+                  Nostalgia
+                </p>
+                <p onClick={() => setFilter("frosted")}
+                  className={filter === "frosted" ? styles.active : ""}>
+                  Frosted
+                </p>
+                <p onClick={() => setFilter("leafyLight")}
+                  className={filter === "leafyLight" ? styles.active : ""}>
+                  Leafy Light
+                </p>
+                <p onClick={() => setFilter("sepiaSage")}
+                  className={filter === "sepiaSage" ? styles.active : ""}>
+                  Sepia Sage
+                </p>
+                <p onClick={() => setFilter("polaroidPop")}
+                  className={filter === "polaroidPop" ? styles.active : ""}>
+                  Polaroid Pop
+                </p>
+              </div>
           </div>
 
           {/* Right: Camera frame */}
           <div className={styles.boothCol}>
             <div className={styles.cameraFrame}>
-              <CameraCanvas ref={cameraRef} />
+              <CameraCanvas ref={cameraRef} filter={filter} />
             </div>
           {/* Start Button */}
 
