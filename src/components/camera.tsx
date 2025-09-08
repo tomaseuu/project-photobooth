@@ -37,15 +37,23 @@ type Props = {
   filter: FilterKey;
 };
 
+// played aroudn
 const cssFor = (f: FilterKey): string => {
   switch (f) {
-    case "goldenHour": return "brightness(1.05) contrast(1.05) saturate(1.25) sepia(0.25) hue-rotate(10deg)";
-    case "nostalgia":  return "sepia(0.85) contrast(0.95) brightness(1.05)";
-    case "frosted":    return "brightness(1.1) contrast(0.9) saturate(0.8) hue-rotate(180deg)";
-    case "leafyLight": return "saturate(1.1) hue-rotate(60deg)";
-    case "sepiaSage":  return "sepia(0.6) hue-rotate(25deg) saturate(1.1)";
-    case "polaroidPop":return "contrast(1.2) brightness(1.05) saturate(1.25)";
-    default:           return "none";
+    case "goldenHour": 
+      return "brightness(1.05) contrast(1.05) saturate(1.25) sepia(0.25) hue-rotate(10deg)";
+    case "nostalgia":  
+      return "sepia(0.85) contrast(0.95) brightness(1.05)";
+    case "frosted":    
+      return "brightness(1.1) contrast(0.9) saturate(0.8) hue-rotate(180deg)";
+    case "leafyLight": 
+      return "saturate(1.1) hue-rotate(60deg)";
+    case "sepiaSage":  
+      return "sepia(0.6) hue-rotate(25deg) saturate(1.1)";
+    case "polaroidPop":
+      return "contrast(1.2) brightness(1.05) saturate(1.25)";
+    default:           
+      return "none";
   }
 };
 
@@ -164,7 +172,8 @@ const CameraCanvas = forwardRef<CameraHandle, Props>(({ filter }, ref) => {
         autoPlay 
         playsInline 
         className={styles.video} 
-        style={{ filter: cssFor(filter) }}
+        style={{ transform: "scaleX(-1)", filter: cssFor(filter), 
+         }}
       />
       <canvas 
         ref={canvasRef} 

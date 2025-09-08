@@ -3,6 +3,12 @@
 
 /* Title / Page Frame */
 
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
 .page h1 {
   font-family: "Times New Roman", Times, serif;
   font-weight: lighter;
@@ -19,6 +25,8 @@
   margin: 0 auto;                       /* centers main content block */
   padding: 0 12px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
 .container {                            /* CameraCanvas Container */
@@ -195,4 +203,43 @@
 .active {
   text-decoration: underline;
   font-weight: 700;
+}
+
+/* ================================= */
+
+/* decorative images */
+
+.butterflies,
+.butterflies2,
+.leafBR,
+.flowerBL {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  opacity: 1.0; 
+}
+
+.butterflies {
+  top: 2px;     
+  right: 250px;
+}
+
+.butterflies2 {
+  top: 100px;     
+  right: 150px;
+}
+
+.flipX {
+  transform: scaleX(-1);
+}
+
+.leafBR {
+  right: -5px;
+  bottom: 30px;
+}
+
+.flowerBL {
+  left: -5px;
+  bottom: -50px;
 }

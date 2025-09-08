@@ -1,92 +1,250 @@
+/* PHOTO STRIP MODULE CSS */
+
+
 /* Title */
+
 .page h1 {
-  font-weight: lighter;
-  font-family: "Times New Roman", Times, serif;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: lighter;
   font-size: 35px;
   height: 10vh;
   margin: 0;
 }
 
-/* 3-column layout */
+/* ================================= */
+
+/* 3-Column Layout */
+
 .layout {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 12px 16px;
   display: grid;
-  grid-template-columns: 220px minmax(340px, 420px) 220px;
-  column-gap: 40px;
+  grid-template-columns: 1fr auto 1fr;
   align-items: start;
+  column-gap: 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 16px 56px;
 }
 
-/* LEFT panel */
-.leftPanel {
+/* ================================= */
+
+/* Panels */
+
+.leftPanel,
+.rightPanel {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 22px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
 }
 
 .smallTitle {
-  font-style: italic;
   margin: 0;
+  font-style: italic;
 }
 
-.paletteBox {
+/* ================================= */
+
+/* Box (Palette / Themes / Tones) */
+
+.box {
   background-color: #d1eac4;
+  border: 0;
+  border-radius: 0;
   padding: 25px 20px;
+  text-align: center;
   width: 180px;
-  min-height: 300px;
+}
+
+.box h2 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 15px;
   text-align: center;
 }
 
-.paletteBox h2 {
-  font-size: 20px;
-  margin: 0 0 15px;
-}
-
-.paletteBox p {
+.box p {
   margin: 18px 0;
   cursor: pointer;
 }
 
-.paletteBox p:hover {
+.box p:hover {
   text-decoration: underline;
 }
 
-/* CENTER photostrip */
+/* width tweak only for right panel boxes */
+.rightPanel .box {
+  width: 220px;
+}
+
+/* ================================= */
+
+/* Custom Row (outside the box) */
+
+.customRowOutside {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  width: 180px;
+}
+
+.customRowOutside .swatchName {
+  font-size: 15px;
+}
+
+/* ================================= */
+
+/* Palette List */
+
+.swatchList {
+  display: grid;
+  gap: 16px;
+}
+
+.swatchRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.swatchName {
+  font-size: 15px;
+  user-select: none;
+}
+
+/* ================================= */
+
+/* Swatch Chip + Hover */
+
+.swatchChipBtn {
+  position: relative;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+
+.swatchChip {
+  position: relative;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #00000080;
+  border-radius: 3px;
+  display: inline-block;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+  will-change: transform;
+}
+
+.swatchChipBtn:hover .swatchChip,
+.swatchChipBtn:focus-visible .swatchChip {
+  transform: scale(1.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
+}
+
+/* kill old duplicate preview if present */
+.swatchPreview {
+  display: none !important;
+}
+
+.swatchChipBtn:hover .swatchPreview,
+.swatchChipBtn:focus-visible .swatchPreview {
+  opacity: 1;
+}
+
+/* hidden color input */
+.hiddenColor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ================================= */
+
+/* Tone Controls */
+
+.toneBlock {
+  text-align: left;
+  margin: 10px 0 18px;
+  width: 180px;
+}
+
+.toneLabel {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.toneBlock input[type="range"] {
+  display: block;
+  width: 100%;
+}
+
+.toneValue {
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ================================= */
+
+/* Center Photostrip */
+
 .centerPanel {
   display: flex;
   justify-content: center;
 }
 
 .strip {
-  width: 340px;                 /* overall photostrip width */
-  border: 2px solid #000;
-  padding: 16px;
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  background: #fff;
+  align-items: center;
+  gap: 10px;
+  width: 340px;
+  padding: 45px 40px 150px;
+  border: 2px solid #000;
+  background: var(--theme-color, #fff);
 }
 
 .slot {
-  width: 100%;
-  height: 160px;                /* fixed slot height for neat stack */
-  border: 1.5px solid #9a9a9a;
+  width: 95%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
   background: #f3f3f3;
+  border: 1.5px solid #000000;
   overflow: hidden;
+  transition: outline-color 120ms ease, box-shadow 120ms ease;
+}
+
+.photoWrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: color;
+  pointer-events: none;
 }
 
 .slot img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .placeholder {
@@ -101,22 +259,49 @@
   );
 }
 
-/* RIGHT panel buttons */
-.rightPanel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+/* drag & drop cues */
+.slot[draggable="true"] {
+  cursor: grab;
 }
 
+.slot[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.dropTarget {
+  outline: 2px dashed #6aa66a;
+  outline-offset: -4px;
+  box-shadow: 0 0 0 4px rgba(209, 234, 196, 0.6) inset;
+}
+
+/* strip hint badge */
+.stripHint {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-style: italic;
+  color: #333;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+/* ================================= */
+
+/* Right Action Buttons */
+
 .boxButton {
-  border: 1px solid black;
-  background: white;
-  padding: 10px 14px;
-  font-size: 16px;
+  background: #fff;
+  border: 1px solid #000;
   cursor: pointer;
-  width: 160px;
+  font-size: 16px;
+  padding: 10px 14px;
   text-align: center;
+  width: 160px;
 }
 
 .boxButton:hover:not(:disabled) {
@@ -124,21 +309,21 @@
 }
 
 .boxButton:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
-/* Responsive: stack on small screens */
-@media (max-width: 900px) {
-  .layout {
-    grid-template-columns: 1fr;
-    row-gap: 24px;
-    justify-items: center;
-  }
-  .leftPanel, .rightPanel {
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+/* ================================= */
+
+/* Hints (generic) */
+
+.hint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-style: italic;
+  color: #555;
+  opacity: 0.9;
+  user-select: none;
 }
+
+/* ================================= */

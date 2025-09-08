@@ -1,25 +1,44 @@
 "use client";
 
+
+/* 
+    Photobooth Page
+     - Shows a live camera using <CameraCanvas>
+     - Lets the user pick a countdown (3/5/10s) and a visual filter
+     - On START: asks CameraCanvas to take 4 photos with that countdown
+                 or lets the user upload exactly 4 photos instead of using
+                 the camera
+     - Stores the 4 photos in sessionStorage, then goes to photostrip page
+
+*/
+
 import styles from "./photobooth.module.css";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import CameraCanvas, { CameraHandle, FilterKey } from "../../components/camera";
+import Image from "next/image";
+
+
 
 export default function Page() {
+
+/* hooks: routers + refs */
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);     // ref to the hidden <input type ="file"
   const cameraRef = useRef<CameraHandle>(null);                   // ref to the camera child
 
 
+/* local states */
   const [countdown, setCountdown] = useState<string>("");
   const [running, setRunning] = useState(false);
   const [filter, setFilter] = useState<FilterKey>("none");
 
+
+/* helpers */
   
   const handleButtonClick = () => fileInputRef.current?.click();  // open file picker by clicking hidden input
-
-
-  // helper to get a data URL for each file
+  
+  // read a file -> data URL string so we can store it
   const fileToDataURL = (file: File) =>
     new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
@@ -28,7 +47,12 @@ export default function Page() {
       reader.readAsDataURL(file);
   });
 
-  // when a file is chosen, grab the first one
+  // File upload flow
+  /* - users must pick exactly 4 images
+     - convert all 4 to data URLs
+     - Save array of data URLS in sessionStorage under "luma_photos"
+     - Go to photostrip to render the strip from those 4 photos
+  */
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files ?? []);
     if (files.length !== 4) {
@@ -49,6 +73,13 @@ export default function Page() {
     }
   };
 
+  /* Camera flow */
+  /* - requires a countdown to start
+     - ask CameraCanvas to run start3/start5/start10
+     - while running, disable certain buttons
+     - if we get exactly 4 photos, save to sessionStorage and navigate
+     - Cancel: Tells CameraCanvas to cancel and reset running state
+  */
   const handleStart = async () => {
     if (!countdown) {
       alert("Please select a countdown first.");
@@ -81,7 +112,42 @@ export default function Page() {
 
   return (
     
-    <div className={styles.page}>
+     <div className={styles.page}>
+      {/* decorative images */}
+      <Image
+        src="/butterflies.png"
+        alt=""
+        width={150}
+        height={150}
+        className={styles.butterflies}
+        priority
+      />
+      <Image
+        src="/butterflies.png"
+        alt=""
+        width={150}
+        height={150}
+        className={`${styles.butterflies2} ${styles.flipX}`}
+
+        priority
+      />
+      <Image
+        src="/leaf2.png"
+        alt=""
+        width={240}
+        height={240}
+        className={styles.leafBR}
+        priority
+      />
+      <Image
+        src="/flowerpot.png"
+        alt=""
+        width={350}
+        height={350}
+        className={styles.flowerBL}
+        priority
+      />
+
        {/* Tile Page */}
       <h1>LUMA LEAF</h1>
 
@@ -162,8 +228,7 @@ export default function Page() {
             <div className={styles.cameraFrame}>
               <CameraCanvas ref={cameraRef} filter={filter} />
             </div>
-          {/* Start Button */}
-
+          {/* Start Button + Cancel Button*/}
           {!running ? (
             <button
               className={styles.start}
