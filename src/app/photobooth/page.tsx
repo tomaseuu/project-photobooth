@@ -155,7 +155,6 @@ export default function Page() {
         {/* Top Controls */}
         <div className={styles.topBar}>
           <div className={styles.leftGroup}>
-            <button className={styles.boxButton} disabled={running} onClick={() => setFilter("none")}>Camera</button>
             <button className={styles.boxButton} onClick={handleButtonClick} disabled={running}>
               Upload Images
             </button>

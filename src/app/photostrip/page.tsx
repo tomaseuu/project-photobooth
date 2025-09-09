@@ -7,52 +7,34 @@
      - Allows user to pick a background color
      - Allows user to change the tones of the photos
      - Export strip as a PNG
+     - Create a 10-min QR share link
 */
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { QRCodeCanvas } from "qrcode.react";                 
 import styles from "./photostrip.module.css";
 
 /* Constants */
 
 const PRESETS = [
-  { 
-    name: "white",  
-    hex: "#ffffff" 
-  },
-  { 
-    name: "blue",   
-    hex: "#bcd6ff" 
-  },
-  { 
-    name: "green",  
-    hex: "#c9ffc9" 
-  },
-  { 
-    name: "purple", 
-    hex: "#e8c9ff" 
-  },
-  { 
-    name: "red",    
-    hex: "#ffb3b3" 
-  },
-  { 
-    name: "black",  
-    hex: "#2b2b2b" 
-  },
+  { name: "white",  hex: "#ffffff" },
+  { name: "blue",   hex: "#bcd6ff" },
+  { name: "green",  hex: "#c9ffc9" },
+  { name: "purple", hex: "#e8c9ff" },
+  { name: "red",    hex: "#ffb3b3" },
+  { name: "black",  hex: "#2b2b2b" },
 ];
 
 const DEFAULTS = {
   themeColor: "#ffffff",
   customColor: "#ffffff",
-  tone: 
-  { 
+  tone: { 
     saturation: 100, 
     brightness: 100, 
     contrast: 100, 
     temperature: 100, 
-    tint: 100 
-  },
+    tint: 100 },
 };
 
 /* Component */
@@ -60,32 +42,30 @@ const DEFAULTS = {
 export default function Page() {
   /* Placeholders - so we do not break anything else */
   const defaultFilter = "none";
-  const defaultTones = 
-  { 
-    brightness: 100, 
-    contrast: 100, 
-    saturation: 100 
-  };
+  const defaultTones = { brightness: 100, contrast: 100, saturation: 100 };
   const defaultPalette = "#ffffff";
   const defaultPhotos: string[] = [];
   const defaultStickers: string[] = [];
 
   /* State */
-  const [filter, setFilter] = useState(defaultFilter);               // not used for rendering
-  const [tones, setTones] = useState(defaultTones);                 
-  const [palette, setPalette] = useState(defaultPalette);            
+  const [filter, setFilter] = useState(defaultFilter); // not used for rendering
+  const [tones, setTones] = useState(defaultTones);
+  const [palette, setPalette] = useState(defaultPalette);
   const [photos, setPhotos] = useState(defaultPhotos);
-  const [stickers, setStickers] = useState(defaultStickers);  
-  const [themeColor, setThemeColor] = useState(DEFAULTS.themeColor);       // strip background color
-  const [customColor, setCustomColor] = useState(DEFAULTS.customColor);    // color picker current value
+  const [stickers, setStickers] = useState(defaultStickers);
+  const [themeColor, setThemeColor] = useState(DEFAULTS.themeColor);    // strip background color
+  const [customColor, setCustomColor] = useState(DEFAULTS.customColor); // color picker current value
   const [tone, setTone] = useState(DEFAULTS.tone);
-  const [showHint, setShowHint] = useState(true);   // "drag to reoder" hint - should disappear once you start dragging
+  const [showHint, setShowHint] = useState(true); // "drag to reorder" hint
+
+  // QR share UI state
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [qrOpen, setQrOpen] = useState(false);
+  const [creatingQR, setCreatingQR] = useState(false);
 
   /* Refs / Routers */
   const colorInputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
-
-
 
   /* Effects */
 
@@ -117,10 +97,7 @@ export default function Page() {
 
     const toneRaw = sessionStorage.getItem("luma_tone");
     if (toneRaw) {
-      try { 
-        setTone(JSON.parse(toneRaw)); 
-      } catch 
-      {}
+      try { setTone(JSON.parse(toneRaw)); } catch {}
     }
   }, []);
 
@@ -128,10 +105,6 @@ export default function Page() {
   useEffect(() => { sessionStorage.setItem("luma_theme", themeColor); }, [themeColor]);
   useEffect(() => { sessionStorage.setItem("luma_custom", customColor); }, [customColor]);
   useEffect(() => { sessionStorage.setItem("luma_tone", JSON.stringify(tone)); }, [tone]);
-
-
-
-
 
   /* Memos */
 
@@ -147,8 +120,7 @@ export default function Page() {
 
   const tempOverlay = useMemo(() => {
     const t = norm(tone.temperature);
-    if (t === 0) 
-      return { color: "rgba(0,0,0,0)", alpha: 0 };
+    if (t === 0) return { color: "rgba(0,0,0,0)", alpha: 0 };
     const color = t > 0 ? "rgba(255,140,0,1)" : "rgba(0,120,255,1)";
     const alpha = Math.min(0.35, Math.abs(t) * 0.35);
     return { color, alpha };
@@ -156,8 +128,7 @@ export default function Page() {
 
   const tintOverlay = useMemo(() => {
     const tt = norm(tone.tint);
-    if (tt === 0) 
-      return { color: "rgba(0,0,0,0)", alpha: 0 };
+    if (tt === 0) return { color: "rgba(0,0,0,0)", alpha: 0 };
     const color = tt > 0 ? "rgba(255,0,170,1)" : "rgba(0,255,170,1)";
     const alpha = Math.min(0.25, Math.abs(tt) * 0.25);
     return { color, alpha };
@@ -169,8 +140,96 @@ export default function Page() {
     [tone]
   );
 
+  /* PNG builder helper */
+  async function buildPhotostripPng(
+  photosList: string[],
+  bgColor: string,
+  filterStr: string,
+  temp: 
+  { 
+    color: string; 
+    alpha: number 
+  },
+  tint: 
+  { 
+    color: string; 
+    alpha: number 
+  }
+) {
+  if (!photosList.length) throw new Error("No photos");
 
+  // Load data URLs into <img> elements
+  const loadImage = (src: string) =>
+    new Promise<HTMLImageElement>((res, rej) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = rej;
+      img.src = src;
+    });
+  const imgs = await Promise.all(photosList.map(loadImage));
 
+  // Fixed layout
+  const pad = 30;                 // outer padding
+  const gap = 20;                 // gap between photos
+  const FRAME_W = 600;            // fixed frame width
+  const FRAME_H = 450;            // fixed frame height (4:3 -> 600x450)
+  const TARGET_AR = FRAME_W / FRAME_H;
+
+  const count = imgs.length;      // usually 4
+  const canvasW = FRAME_W + pad * 2;
+  const canvasH = pad * 2 + count * FRAME_H + (count - 1) * gap;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = canvasW;
+  canvas.height = canvasH;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("No 2D context");
+
+  // Background (strip color)
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, canvasW, canvasH);
+
+  // Base tone filter
+  ctx.filter = filterStr;
+
+  // Verticle 
+  let y = pad;
+  for (const img of imgs) {
+    const srcAR = img.width / img.height;
+
+    let sx = 0, sy = 0, sw = img.width, sh = img.height;
+    if (srcAR > TARGET_AR) {
+      sh = img.height;
+      sw = Math.round(sh * TARGET_AR);
+      sx = Math.round((img.width - sw) / 2);
+      sy = 0;
+    } else {
+      sw = img.width;
+      sh = Math.round(sw / TARGET_AR);
+      sx = 0;
+      sy = Math.round((img.height - sh) / 2);
+    }
+
+    ctx.drawImage(img, sx, sy, sw, sh, pad, y, FRAME_W, FRAME_H);
+    y += FRAME_H + gap;
+  }
+
+  // Overlays (temperature / tint)
+  // @ts-ignore
+  ctx.globalCompositeOperation = "color";
+  if (temp.alpha > 0) {
+    ctx.fillStyle = temp.color.replace(",1)", `,${temp.alpha})`);
+    ctx.fillRect(0, 0, canvasW, canvasH);
+  }
+  if (tint.alpha > 0) {
+    ctx.fillStyle = tint.color.replace(",1)", `,${tint.alpha})`);
+    ctx.fillRect(0, 0, canvasW, canvasH);
+  }
+  ctx.globalCompositeOperation = "source-over";
+
+  return canvas.toDataURL("image/png");
+}
 
   /* Handlers - action buttons */
 
@@ -191,15 +250,8 @@ export default function Page() {
     sessionStorage.setItem("luma_custom", DEFAULTS.customColor);
     sessionStorage.setItem("luma_tone", JSON.stringify(DEFAULTS.tone));
 
-
     setFilter("none");
-    setTones(
-      { 
-        brightness: 100, 
-        contrast: 100, 
-        saturation: 100 
-      }
-    );
+    setTones({ brightness: 100, contrast: 100, saturation: 100 });
     setPalette("#ffffff");
 
     // stickers
@@ -216,78 +268,58 @@ export default function Page() {
     setShowHint(true);
   };
 
-
-
-  // export PNG
+  // export PNG (uses the helper)
   const handleDownload = async () => {
     if (!photos.length) return;
+    try {
+      const url = await buildPhotostripPng(photos, themeColor, cssFilter, tempOverlay, tintOverlay);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "photostrip.png";
+      a.click();
+    } catch (e) {
+      alert("Could not build image.");
+      console.error(e);
+    }
+  };
 
-    // helper: create <img> and wait for load
-    const loadImage = (src: string) =>
-      new Promise<HTMLImageElement>((res, rej) => {
-        const img = new Image();
-        img.onload = () => res(img);
-        img.onerror = rej;
-        img.src = src;
+  // QR CODE
+  const handleCreateQR = async () => {
+    if (!photos.length) return;
+    try {
+      setCreatingQR(true);
+
+      // PNG data URL for current strip
+      const dataUrl = await buildPhotostripPng(
+        photos,
+        themeColor,
+        cssFilter,
+        tempOverlay,
+        tintOverlay
+      );
+
+      // POST to API -> get token
+      const res = await fetch("/api/strip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dataUrl }),
       });
+      if (!res.ok) {
+        alert("Failed to create QR link.");
+        return;
+      }
+      const { token } = await res.json();
 
-    const imgs = await Promise.all(photos.map(loadImage));
-    // layout math for export canvas
-    const pad = 30;           // outer padding
-    const gap = 20;           // gap between photos
-    const targetW = 600;      // scale every photo to this width
-
-    const scaled = imgs.map((img) => {
-      const s = targetW / img.width;
-      return { img, w: targetW, h: Math.round(img.height * s) };
-    });
-
-    const innerH = scaled.reduce((a, s) => a + s.h, 0) + gap * (scaled.length - 1);
-    const canvasW = targetW + pad * 2;
-    const canvasH = innerH + pad * 2;
-
-    // build canvas
-    const canvas = document.createElement("canvas");
-    canvas.width = canvasW;
-    canvas.height = canvasH;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-
-    // background (strip color)
-    ctx.fillStyle = themeColor;
-    ctx.fillRect(0, 0, canvasW, canvasH);
-    ctx.filter = cssFilter;
-
-    // draw photos vertically stacked
-    let y = pad;
-    scaled.forEach(({ img, w, h }) => {
-      ctx.drawImage(img, pad, y, w, h);
-      y += h + gap;
-    });
-
-
-
-    // overlays
-    // @ts-ignore
-    ctx.globalCompositeOperation = "color";
-    if (tempOverlay.alpha > 0) {
-      ctx.fillStyle = tempOverlay.color.replace(",1)", `,${tempOverlay.alpha})`);
-      ctx.fillRect(0, 0, canvasW, canvasH);
+      // 3) Build absolute URL to the share page
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      setShareUrl(`${origin}/share/${token}`);
+      setQrOpen(true);
+    } catch (e) {
+      console.error(e);
+      alert("Could not create QR link.");
+    } finally {
+      setCreatingQR(false);
     }
-    if (tintOverlay.alpha > 0) {
-      ctx.fillStyle = tintOverlay.color.replace(",1)", `,${tintOverlay.alpha})`);
-      ctx.fillRect(0, 0, canvasW, canvasH);
-    }
-    ctx.globalCompositeOperation = "source-over";
-
-    // export as PNG
-    const url = canvas.toDataURL("image/png");
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "photostrip.png";
-    a.click();
   };
 
   // open native color picker
@@ -298,9 +330,6 @@ export default function Page() {
     if (el.showPicker) el.showPicker();
     else el.click();
   };
-
-
-
 
   /* Drag and Drop Feature */
 
@@ -325,6 +354,7 @@ export default function Page() {
   };
 
   const handleDragLeave = () => setOverIdx(null);
+
   const handleDrop = (i: number) => (e: React.DragEvent) => {
     e.preventDefault();
 
@@ -336,8 +366,7 @@ export default function Page() {
     dragFrom.current = null;
     setOverIdx(null);
 
-    if (Number.isNaN(from) || from === i) 
-      return;
+    if (Number.isNaN(from) || from === i) return;
 
     // move photo inside array and persist new order
     setPhotos((prev) => {
@@ -353,10 +382,6 @@ export default function Page() {
     dragFrom.current = null;
     setOverIdx(null);
   };
-
-
-
-
 
   /* Render */
 
@@ -469,79 +494,146 @@ export default function Page() {
           </div>
         </main>
 
-  {/* RIGHT: Tones + Actions */}
-<aside className={styles.rightPanel}>
-  <div className={styles.box}>
-    <h2>Tones</h2>
+        {/* RIGHT: Tones + Actions */}
+        <aside className={styles.rightPanel}>
+          <div className={styles.box}>
+            <h2>Tones</h2>
 
-    <div className={styles.toneBlock}>
-      <div className={styles.toneLabel}>Saturation</div>
-      <input
-        type="range"
-        min={0}
-        max={200}
-        value={tone.saturation}
-        onChange={(e) => setTone({ ...tone, saturation: +e.target.value })}
-      />
-      <div className={styles.toneValue}>{tone.saturation}%</div>
-    </div>
+            <div className={styles.toneBlock}>
+              <div className={styles.toneLabel}>Saturation</div>
+              <input
+                type="range"
+                min={0}
+                max={200}
+                value={tone.saturation}
+                onChange={(e) => setTone({ ...tone, saturation: +e.target.value })}
+              />
+              <div className={styles.toneValue}>{tone.saturation}%</div>
+            </div>
 
-    <div className={styles.toneBlock}>
-      <div className={styles.toneLabel}>Brightness</div>
-      <input
-        type="range"
-        min={0}
-        max={200}
-        value={tone.brightness}
-        onChange={(e) => setTone({ ...tone, brightness: +e.target.value })}
-      />
-      <div className={styles.toneValue}>{tone.brightness}%</div>
-    </div>
+            <div className={styles.toneBlock}>
+              <div className={styles.toneLabel}>Brightness</div>
+              <input
+                type="range"
+                min={0}
+                max={200}
+                value={tone.brightness}
+                onChange={(e) => setTone({ ...tone, brightness: +e.target.value })}
+              />
+              <div className={styles.toneValue}>{tone.brightness}%</div>
+            </div>
 
-    <div className={styles.toneBlock}>
-      <div className={styles.toneLabel}>Contrast</div>
-      <input
-        type="range"
-        min={0}
-        max={200}
-        value={tone.contrast}
-        onChange={(e) => setTone({ ...tone, contrast: +e.target.value })}
-      />
-      <div className={styles.toneValue}>{tone.contrast}%</div>
-    </div>
+            <div className={styles.toneBlock}>
+              <div className={styles.toneLabel}>Contrast</div>
+              <input
+                type="range"
+                min={0}
+                max={200}
+                value={tone.contrast}
+                onChange={(e) => setTone({ ...tone, contrast: +e.target.value })}
+              />
+              <div className={styles.toneValue}>{tone.contrast}%</div>
+            </div>
 
-    <div className={styles.toneBlock}>
-      <div className={styles.toneLabel}>Temperature</div>
-      <input
-        type="range"
-        min={0}
-        max={200}
-        value={tone.temperature}
-        onChange={(e) => setTone({ ...tone, temperature: +e.target.value })}
-      />
-      <div className={styles.toneValue}>{tone.temperature}%</div>
-    </div>
+            <div className={styles.toneBlock}>
+              <div className={styles.toneLabel}>Temperature</div>
+              <input
+                type="range"
+                min={0}
+                max={200}
+                value={tone.temperature}
+                onChange={(e) => setTone({ ...tone, temperature: +e.target.value })}
+              />
+              <div className={styles.toneValue}>{tone.temperature}%</div>
+            </div>
 
-    <div className={styles.toneBlock}>
-      <div className={styles.toneLabel}>Tint</div>
-      <input
-        type="range"
-        min={0}
-        max={200}
-        value={tone.tint}
-        onChange={(e) => setTone({ ...tone, tint: +e.target.value })}
-      />
-      <div className={styles.toneValue}>{tone.tint}%</div>
-    </div>
-  </div>
+            <div className={styles.toneBlock}>
+              <div className={styles.toneLabel}>Tint</div>
+              <input
+                type="range"
+                min={0}
+                max={200}
+                value={tone.tint}
+                onChange={(e) => setTone({ ...tone, tint: +e.target.value })}
+              />
+              <div className={styles.toneValue}>{tone.tint}%</div>
+            </div>
+          </div>
 
-  <button className={styles.boxButton} onClick={handleNew}>NEW</button>
-  <button className={styles.boxButton} onClick={handleRedo}>RESET ALL</button>
-  <button className={styles.boxButton} onClick={() => alert("Coming soon!")}>VIDEO GIF</button>
-  <button className={styles.boxButton} onClick={() => alert("Coming soon!")}>QR CODE</button>
-  <button className={styles.boxButton} onClick={handleDownload} disabled={!photos.length}>DOWNLOAD</button>
-</aside>
+          <button className={styles.boxButton} onClick={handleNew}>NEW</button>
+          <button className={styles.boxButton} onClick={handleRedo}>RESET ALL</button>
+          <button className={styles.boxButton} onClick={() => alert("Coming soon!")}>VIDEO GIF</button>
 
+          {/* QR CODE button now wired */}
+          <button
+            className={styles.boxButton}
+            onClick={handleCreateQR}
+            disabled={!photos.length || creatingQR}
+          >
+            {creatingQR ? "Building QR..." : "QR CODE"}
+          </button>
+
+          <button className={styles.boxButton} onClick={handleDownload} disabled={!photos.length}>DOWNLOAD</button>
+
+          {/* Simple QR card (shows after we create the link) */}
+          {qrOpen && shareUrl && (
+            <div
+              style={{
+                marginTop: 12,
+                padding: 16,
+                width: 240,
+                background: "#fff",
+                border: "1px solid #000",
+                borderRadius: 14,
+                textAlign: "center",
+                boxShadow: "0 6px 16px rgba(0,0,0,.1)",
+              }}
+            >
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>QR Code</div>
+              <div style={{ fontSize: 13, color: "#555", marginBottom: 10 }}>
+                Scan to view & download your photo strip.
+              </div>
+
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: 8,
+                  background: "#fff",
+                  borderRadius: 12,
+                  boxShadow: "0 6px 16px rgba(0,0,0,.12)",
+                  marginBottom: 10,
+                }}
+              >
+                <QRCodeCanvas value={shareUrl} size={180} />
+              </div>
+
+              <button
+                className={styles.boxButton}
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(shareUrl);
+                    alert("Link copied!");
+                  } catch {}
+                }}
+                style={{ width: "100%", borderRadius: 999 }}
+              >
+                Copy Link
+              </button>
+
+              <div style={{ fontSize: 12, color: "#666", marginTop: 8 }}>
+                This link will expire in 10 minutes
+              </div>
+
+              <button
+                className={styles.boxButton}
+                onClick={() => setQrOpen(false)}
+                style={{ width: "100%", marginTop: 8 }}
+              >
+                Close
+              </button>
+            </div>
+          )}
+        </aside>
       </div>
     </div>
   );

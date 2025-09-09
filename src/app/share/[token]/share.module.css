@@ -1,0 +1,80 @@
+/* Layout */
+.page {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: linear-gradient(180deg, #d1eac4, #d1eac4);
+}
+
+/* Card */
+.card {
+  width: 360px;
+  max-width: 94vw;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  text-align: center;
+}
+
+/* Typography */
+.title {
+  margin: 6px 0 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.lede {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.loading {
+  color: #333;
+  margin: 8px 0;
+}
+
+.error {
+  color: crimson;
+  margin-bottom: 8px;
+}
+
+.meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Image */
+.image {
+  max-width: 100%;
+  width: 300px;
+  border: 1px solid #000;
+  display: block;
+  margin: 12px auto;
+}
+
+/* Buttons */
+.primaryBtn {
+  display: inline-block;
+  margin: 8px 0 12px;
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.secondaryBtn {
+  padding: 8px 12px;
+  border: 1px solid #000;
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.actions {
+  margin-top: 12px;
+}
