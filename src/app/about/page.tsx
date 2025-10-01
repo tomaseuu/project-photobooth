@@ -23,6 +23,13 @@ export default function About() {
           stick with you. It’s more than just photos—it's about connection,
           creativity, and letting good times take root.
         </p>
+        <p> -------------------------------------------------------- </p>
+        <p>
+          Developer: Thomas Le
+        </p>
+        <p>
+          Grahpic Designer: Haxin Huang
+        </p>
       </div>
       <div className={styles.aboutImage}>
         <Image

@@ -327,3 +327,38 @@
 }
 
 /* ================================= */
+
+/* Footer inside the strip */
+.footerBox {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 80px); 
+  text-align: center;
+  pointer-events: none; 
+}
+
+.footerTitle {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.1;
+  color: #000;
+  letter-spacing: 0.5px;
+  color: inherit;
+}
+
+.footerDate {
+  margin-top: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  color: #222;
+  opacity: 0.9;
+  color: inherit;
+}
+
+/* reduce bottom pad a touch since we’re adding a footer element */
+.strip {
+  padding: 45px 40px 130px;
+}

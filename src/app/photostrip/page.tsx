@@ -57,6 +57,12 @@ export default function Page() {
   const [customColor, setCustomColor] = useState(DEFAULTS.customColor); // color picker current value
   const [tone, setTone] = useState(DEFAULTS.tone);
   const [showHint, setShowHint] = useState(true); // "drag to reorder" hint
+  const [footerTitle, setFooterTitle] = useState("LUMA LEAF"); // Footer Branding ( Bottom of PhotoStrip )
+  const [footerDate, setFooterDate] = useState(
+  new Date().toLocaleDateString() // date change real time 
+  );
+
+
 
   // QR share UI state
   const [shareUrl, setShareUrl] = useState<string | null>(null);
@@ -139,7 +145,13 @@ export default function Page() {
     () => `saturate(${tone.saturation}%) brightness(${tone.brightness}%) contrast(${tone.contrast}%)`,
     [tone]
   );
-
+  
+  // dark
+  function isDark(hex: string) {
+    const h = hex.toLowerCase();
+    return h === "#000000" || h === "#000" || h === "#2b2b2b"; // black or dark grey from your presets
+  }
+  
   /* PNG builder helper */
   async function buildPhotostripPng(
   photosList: string[],
@@ -154,6 +166,10 @@ export default function Page() {
   { 
     color: string; 
     alpha: number 
+  },
+  footer: 
+  { title: string; date: string 
+
   }
 ) {
   if (!photosList.length) throw new Error("No photos");
@@ -176,8 +192,9 @@ export default function Page() {
   const TARGET_AR = FRAME_W / FRAME_H;
 
   const count = imgs.length;      // usually 4
+  const footer_h = 120;
   const canvasW = FRAME_W + pad * 2;
-  const canvasH = pad * 2 + count * FRAME_H + (count - 1) * gap;
+  const canvasH = pad * 2 + count * FRAME_H + (count - 1) * gap + footer_h;
 
   const canvas = document.createElement("canvas");
   canvas.width = canvasW;
@@ -228,6 +245,29 @@ export default function Page() {
   }
   ctx.globalCompositeOperation = "source-over";
 
+    // --- footer ---
+  ctx.filter = "none";                 // keep text crisp (no photo filters)
+  const FOOTER_H = footer_h;           // just for readability
+
+  // repaint footer background (helps if overlays tinted the area)
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, canvasH - FOOTER_H, canvasW, FOOTER_H);
+
+  // if background is black, turn text to white
+  const textColor = isDark(bgColor) ? "#fff" : "#000";
+  ctx.fillStyle = textColor;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  // title
+  ctx.font = '700 36px "Times New Roman", Times, serif';
+  ctx.fillText(footer.title, canvasW / 2, canvasH - FOOTER_H / 2 - 10);
+
+  // date
+  ctx.font = '400 18px Arial, Helvetica, sans-serif';
+  ctx.fillText(footer.date, canvasW / 2, canvasH - FOOTER_H / 2 + 24);
+
+
   return canvas.toDataURL("image/png");
 }
 
@@ -272,7 +312,14 @@ export default function Page() {
   const handleDownload = async () => {
     if (!photos.length) return;
     try {
-      const url = await buildPhotostripPng(photos, themeColor, cssFilter, tempOverlay, tintOverlay);
+      const url = await buildPhotostripPng(
+        photos, 
+        themeColor, 
+        cssFilter, 
+        tempOverlay, 
+        tintOverlay,
+        {title: footerTitle, date:footerDate}
+      );
       const a = document.createElement("a");
       a.href = url;
       a.download = "photostrip.png";
@@ -295,7 +342,11 @@ export default function Page() {
         themeColor,
         cssFilter,
         tempOverlay,
-        tintOverlay
+        tintOverlay,
+        { 
+          title: footerTitle, 
+          date: footerDate 
+        }
       );
 
       // POST to API -> get token
@@ -382,6 +433,9 @@ export default function Page() {
     dragFrom.current = null;
     setOverIdx(null);
   };
+
+  const footerTextColor = isDark(themeColor) ? "#fff" : "#000";
+
 
   /* Render */
 
@@ -491,6 +545,10 @@ export default function Page() {
                 </div>
               </div>
             ))}
+            <div className={styles.footerBox} style={{ color: footerTextColor }}>
+             <div className={styles.footerTitle}>{footerTitle}</div>
+             <div className={styles.footerDate}>{footerDate}</div>
+             </div>
           </div>
         </main>
 
