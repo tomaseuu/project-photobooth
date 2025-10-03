@@ -3,7 +3,7 @@
 
 // DOM (Document Object Model): is the browser's live, tree-like representation of
 //                              your web page that JavaScript can read and change.
-// Wrapper: A wrapper is something that surrounds other code or UI to add layout or behavior.
+// Wrapper: A wrapper is something that surrounds other code or UI to add layout or behavior
 // ===== Imports ===== (trying to understand these imports more)
 import React, {
   useEffect,              // run code after component mounts
@@ -25,7 +25,7 @@ export type FilterKey =
   | "sepiaSage"
   | "polaroidPop";
 
-{/* Type: what the parent can call in photobooth page */}
+{/* what the parent can call in photobooth page */}
 export type CameraHandle = {
   start3: () => Promise<string[]>;      // takes 4 photos, 3 secs apart, return photos
   start5: () => Promise<string[]>;      // same, 5s apart
@@ -37,7 +37,7 @@ type Props = {
   filter: FilterKey;
 };
 
-// played aroudn
+// filters
 const cssFor = (f: FilterKey): string => {
   switch (f) {
     case "goldenHour": 
@@ -119,31 +119,106 @@ const CameraCanvas = forwardRef<CameraHandle, Props>(({ filter }, ref) => {
     return png;
   };
 
-  {/* Start Session - run a full session: 4 photos, wait N seconds between each */}
-  const runSession = async (seconds: number): Promise<string[]> => {
-    cancelRef.current = false;
-    setPhotos([]);                                                // clear old photos from the UI
-    const shots: string[] =[]; 
-    
-    for (let i = 0; i < 4; i++) {                             
-      const ok = await doCountdown(seconds);
-      if (!ok || cancelRef.current)
-        break;
-      const png = takePhoto();          // then snap
-      if(png) 
-        shots.push(png);
+    /** capture preroll frames during the countdown and stash in sessionStorage */
+  async function capturePrerollFrames(
+    videoEl: HTMLVideoElement,
+    seconds = 3,
+    fps = 8
+  ): Promise<string[]> {
+  if (!videoEl.videoWidth || !videoEl.videoHeight) {
+    await new Promise<void>((resolve) => {
+      const onReady = () => { videoEl.removeEventListener("loadedmetadata", onReady); resolve(); };
+      videoEl.addEventListener("loadedmetadata", onReady, { once: true });
+      if (videoEl.readyState >= 1) resolve();
+    });
+  }
+
+  // smaller than the strip 
+  const frame_w = 360;  
+  const frame_h = 270;  
+  const quality_jpeg = 0.6; 
+
+  const canvas = document.createElement("canvas");
+  canvas.width = frame_w;
+  canvas.height = frame_h;
+  const ctx = canvas.getContext("2d")!;
+
+  const total = Math.max(1, Math.round(seconds * fps));
+  const delay = 1000 / fps;
+
+  // cap how many frames we keep per slot
+  const MAX_KEEP = 16;
+  const step = Math.max(1, Math.floor(total / MAX_KEEP));
+
+  const frames: string[] = [];
+  for (let i = 0; i < total; i++) {
+    if (cancelRef.current) break;
+
+    // mirror to match UI
+    ctx.save();
+    ctx.scale(-1, 1);
+    ctx.drawImage(videoEl, -frame_w, 0, frame_w, frame_h);
+    ctx.restore();
+
+    if (i % step === 0) {
+      frames.push(canvas.toDataURL("image/jpeg", quality_jpeg));
     }
-    return shots;                              
+
+    // eslint-disable-next-line no-await-in-loop
+    await new Promise((r) => setTimeout(r, delay));
+  }
+  return frames;
+}
+
+    /** Start Session - run a full session: capture preroll + 4 photos */
+    const runSession = async (seconds: number): Promise<string[]> => {
+      cancelRef.current = false;
+      setPhotos([]); // clear old photos from UI
+      const shots: string[] = [];
+      const prerollAll: string[][] = []; // holds 4 arrays (one per shot)
+
+      // clear any old preroll bundle
+      sessionStorage.removeItem("luma_preroll_all");
+
+      for (let i = 0; i < 4; i++) {
+        const video = videoRef.current;
+
+        // start capturing preroll DURING the countdown (no extra pause)
+        const capPromise = video
+          ? capturePrerollFrames(video, Math.min(seconds, 8), 8) // 8 fps, max 8s
+          : Promise.resolve<string[]>([]);
+
+        const ok = await doCountdown(seconds);
+        if (!ok || cancelRef.current) break;
+
+        // collect the preroll frames for this slot
+        const frames = await capPromise;
+        prerollAll.push(frames);
+
+        // snap the still for this slot
+        const png = takePhoto();
+        if (png) shots.push(png);
+      }
+
+      // stash all 4 preroll sets for the photostrip page
+      try {
+        sessionStorage.setItem("luma_preroll_all", JSON.stringify(prerollAll));
+        console.log("[preroll debug] saved lengths:", prerollAll.map(g => g.length));
+      } catch {}
+
+      return shots;
+    };
+
+    const start3 = () => runSession(3);
+    const start5 = () => runSession(5);
+    const start10 = () => runSession(10);
+
+    const cancel = () => {
+      cancelRef.current = true;
+      setCount(null);
+      setFlash(false);
   };
-  
-  const start3 = () => runSession(3);
-  const start5 = () => runSession(5);
-  const start10 = () => runSession(10);
-  const cancel = () => {
-    cancelRef.current = true;
-    setCount(null);
-    setFlash(false);
-  };
+
   
   // API to parent
   useImperativeHandle(ref, () => ({ start3, start5, start10, cancel }));
@@ -166,19 +241,17 @@ const CameraCanvas = forwardRef<CameraHandle, Props>(({ filter }, ref) => {
 
   {/* Camera Canvas */}
   return (
-    <div className={styles.container}>
-      <video 
-        ref={videoRef} 
-        autoPlay 
-        playsInline 
-        className={styles.video} 
-        style={{ transform: "scaleX(-1)", filter: cssFor(filter), 
-         }}
+  <div className={styles.container}>
+    {/* NEW: stage only for the camera area */}
+    <div className={styles.stage}>
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        className={styles.video}
+        style={{ transform: "scaleX(-1)", filter: cssFor(filter) }}
       />
-      <canvas 
-        ref={canvasRef} 
-        className={styles.canvas} 
-      />
+      <canvas ref={canvasRef} className={styles.canvas} />
 
       {/* Countdown Number */}
       <div className={styles.overlay}>
@@ -187,15 +260,17 @@ const CameraCanvas = forwardRef<CameraHandle, Props>(({ filter }, ref) => {
 
       {/* Flash overlay */}
       <div className={`${styles.flashCover} ${flash ? styles.showFlash : ""}`} />
-
-      {/* Thumbnails of captured photos */}
-      <div className={styles.photoStrip}>
-        {photos.map((p, i) => (
-          <img key={i} src={p} alt={`Photo ${i + 1}`} className={styles.photo} />
-        ))}
-      </div>
     </div>
-  );
+
+    {/* Thumbnails of captured photos (sibling, not inside stage) */}
+    <div className={styles.photoStrip}>
+      {photos.map((p, i) => (
+        <img key={i} src={p} alt={`Photo ${i + 1}`} className={styles.photo} />
+      ))}
+    </div>
+  </div>
+);
+
 });
 
 export default CameraCanvas;

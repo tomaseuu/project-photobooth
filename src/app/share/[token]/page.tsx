@@ -8,17 +8,16 @@ import styles from "./share.module.css";
 export default function SharePage() {
   const { token } = useParams<{ token: string }>();
 
-
-  // React state variables to track
-  const [img, setImg] = useState<string | null>(null);                // photostrip image
-  const [remaining, setRemaining] = useState<number | null>(null);    // how many seconds until link expires
-  const [error, setError] = useState<string | null>(null);            // error message
-  const [copyOk, setCopyOk] = useState(false);                        // whether "copy link" was successful
+  // photostrip image; remaining = how many SECONDS until link expires (internally track seconds)
+  const [img, setImg] = useState<string | null>(null);
+  const [remaining, setRemaining] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [copyOk, setCopyOk] = useState(false);
 
   const shareUrl =
     typeof window !== "undefined" ? `${window.location.origin}/share/${token}` : "";
 
-// when page first loads, fetch image from API
+  // when page first loads, fetch image from API
   useEffect(() => {
     if (!token) return;
     (async () => {
@@ -31,12 +30,28 @@ export default function SharePage() {
         }
         const j = await res.json();
         setImg(j.dataUrl);
-        setRemaining(j.expiresInSeconds ?? null);
+
+        // figure out how long link is valid
+        const seconds =
+          j.expiresInSeconds ??
+          (j.expiresInMinutes != null ? j.expiresInMinutes * 60 : null);
+
+        setRemaining(seconds ?? null);
       } catch {
         setError("Network error");
       }
     })();
   }, [token]);
+
+  // countdown timer: tick down every second
+  useEffect(() => {
+    if (remaining == null) 
+      return;
+    const id = setInterval(() => {
+      setRemaining((prev) => (prev != null && prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [remaining != null]); 
 
   // Handle "download" button -> create a hidden link and trigger a file download
   function handleDownload() {
@@ -55,6 +70,10 @@ export default function SharePage() {
       setTimeout(() => setCopyOk(false), 1500);
     } catch {}
   }
+
+  // Helper: minutes text from seconds
+  const minutesLeft =
+    remaining != null ? Math.max(1, Math.ceil(remaining / 60)) : null;
 
   return (
     <main className={styles.page}>
@@ -76,7 +95,11 @@ export default function SharePage() {
         )}
 
         <div className={styles.meta}>
-          {remaining != null ? `This link will expire in ~${remaining}s` : "Link active"}
+          {remaining != null
+            ? `This link will expire in ~${minutesLeft} minute${
+                minutesLeft === 1 ? "" : "s"
+              }`
+            : "Link active"}
         </div>
 
         <div className={styles.actions}>
