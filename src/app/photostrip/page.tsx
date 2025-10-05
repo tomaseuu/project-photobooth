@@ -12,25 +12,44 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { QRCodeCanvas } from "qrcode.react";                 
+import { QRCodeCanvas } from "qrcode.react"; 
 import styles from "./photostrip.module.css";
 
 /* simple color presets the user can click */
 
 const PRESETS = [
-  { name: "white",  hex: "#ffffff" },
-  { name: "blue",   hex: "#bcd6ff" },
-  { name: "green",  hex: "#c9ffc9" },
-  { name: "purple", hex: "#e8c9ff" },
-  { name: "red",    hex: "#ffb3b3" },
-  { name: "black",  hex: "#2b2b2b" },
+  { 
+    name: "white",  
+    hex: "#ffffff" 
+  },
+  { 
+    name: "blue",   
+    hex: "#bcd6ff" 
+  },
+  { 
+    name: "green",  
+    hex: "#c9ffc9" 
+  },
+  { 
+    name: "purple", 
+    hex: "#e8c9ff" 
+  },
+  { 
+    name: "red",    
+    hex: "#ffb3b3" 
+  },
+  { 
+    name: "black",  
+    hex: "#2b2b2b" 
+  },
 ];
 
 /* default setting for the strip and tones */
 const DEFAULTS = {
   themeColor: "#ffffff",
   customColor: "#ffffff",
-  tone: { 
+  tone: 
+  { 
     saturation: 100, 
     brightness: 100, 
     contrast: 100, 
@@ -426,27 +445,30 @@ export default function Page() {
 
   /* PNG builder helper */
   async function buildPhotostripPng(
-  photosList: string[],
-  bgColor: string,
-  filterStr: string,
-  temp: 
-  { 
-    color: string; 
-    alpha: number 
-  },
-  tint: 
-  { 
-    color: string; 
-    alpha: number 
-  },
-  footer: 
-  { title: string; date: string 
+    photosList: string[],
+    bgColor: string,
+    filterStr: string,
+    temp: 
+    { 
+      color: string; 
+      alpha: number 
+    },
+    tint: 
+    {
+      color: string; 
+      alpha: number 
+    },
+    footer: 
+    { 
+      title: string; 
+      date: string 
+    },
+    format: "png" | "jpeg" = "png",
+    quality = 0.9
+  ) {
+      if (!photosList.length) 
+        throw new Error("No photos");
 
-  }
-) {
-  if (!photosList.length) throw new Error("No photos");
-
-   
   const loadImage = (src: string) =>
     new Promise<HTMLImageElement>((res, rej) => {
       const img = new Image();
@@ -538,10 +560,12 @@ export default function Page() {
   // date
   ctx.font = '400 18px Arial, Helvetica, sans-serif';
   ctx.fillText(footer.date, canvasW / 2, canvasH - FOOTER_H / 2 + 24);
-
-
-  return canvas.toDataURL("image/png");
-}
+  
+  if (format === "jpeg") {
+    return canvas.toDataURL("image/jpeg", quality); // MUCH smaller
+    }
+    return canvas.toDataURL("image/png");
+  }
 
   /* Handlers - action buttons */
 
@@ -595,7 +619,12 @@ export default function Page() {
         cssFilter, 
         tempOverlay, 
         tintOverlay,
-        {title: footerTitle, date:footerDate}
+        {
+          title: footerTitle, 
+          date:footerDate
+        },
+        "png",
+        0.92
       );
       const a = document.createElement("a");
       a.href = url;
@@ -623,7 +652,9 @@ export default function Page() {
         { 
           title: footerTitle, 
           date: footerDate 
-        }
+        },
+        "jpeg",
+        0.85
       );
 
       // POST to API -> get token
@@ -638,9 +669,32 @@ export default function Page() {
       }
       const { token } = await res.json();
 
+      if (!token) {
+      alert("No token returned from server.");
+      return;
+    }
+
       // build absolute URL to the share page
       const origin = typeof window !== "undefined" ? window.location.origin : "";
-      setShareUrl(`${origin}/share/${token}`);
+      const url = `${origin}/share/${token}`;
+
+      let ok = false;
+      try {
+        const head = await fetch(url, { method: "HEAD", cache: "no-store" });
+        ok = head.ok;
+      } catch {}
+      if (!ok) {
+        try {
+          const get = await fetch(url, { method: "GET", cache: "no-store" });
+          ok = get.ok;
+        } catch {}
+      }
+      if (!ok) {
+        alert("The share link couldn’t be verified. Please try again.");
+        return;
+      }
+
+      setShareUrl(url);
       setQrOpen(true);
     } catch (e) {
       console.error(e);
@@ -780,7 +834,17 @@ export default function Page() {
             <p>TWICE</p>
             <p>Miffy</p>
           </div>
+          <img
+            src="/paintbottles.png"
+            alt=""
+            width={250}
+            height={250}
+            className={styles.paintbottles}
+          />
         </aside>
+        
+        
+        
 
         {/* CENTER: Strip */}
         <main className={styles.centerPanel}>
@@ -831,6 +895,13 @@ export default function Page() {
 
         {/* RIGHT: Tones + Actions */}
         <aside className={styles.rightPanel}>
+          <img
+            src="/leaf3.png"
+            alt=""
+            width={180}
+            height={280}
+            className={styles.leaf}
+          />
           <div className={styles.box}>
             <h2>Tones</h2>
 
@@ -894,6 +965,7 @@ export default function Page() {
               <div className={styles.toneValue}>{tone.tint}%</div>
             </div>
           </div>
+          
 
           <button className={styles.boxButton} onClick={handleNew}>NEW</button>
           <button className={styles.boxButton} onClick={handleRedo}>RESET ALL</button>
@@ -1013,6 +1085,14 @@ export default function Page() {
               </button>
             </div>
           )}
+  
+          <img
+            src="/pallete.png"
+            alt=""
+            width={200}
+            height={200}
+            className={styles.pallete}
+          />
         </aside>
       </div>
     </div>

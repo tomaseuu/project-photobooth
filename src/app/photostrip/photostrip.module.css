@@ -42,6 +42,15 @@
   font-size: 15px;
 }
 
+.leftPanel {
+  position: relative; 
+
+}
+.rightPanel {
+  position: relative;          
+  padding-top: 60px;
+}
+
 .smallTitle {
   margin: 0;
   font-style: italic;
@@ -362,3 +371,30 @@
 .strip {
   padding: 45px 40px 130px;
 }
+
+/* ================================= */
+/* decorative images */
+
+.leaf {
+  position: absolute;
+  top: -170px;        /* tweak */
+  right: 35px;
+  width: 180px;
+  height: auto;
+  pointer-events: none;
+  z-index: 2;
+}
+
+
+.paintbottles {
+  position: absolute;            
+  left: 50px;              
+  bottom: -150px             
+}
+
+.pallete {
+  position: absolute;
+  right: 55px;                  
+  bottom: -200px;                 
+}
+
