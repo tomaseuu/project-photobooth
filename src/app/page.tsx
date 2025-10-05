@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
 import styles from "./home.module.css";
 import Link from "next/link";
 
@@ -15,21 +14,25 @@ export default function Home() {
       
       <div className={styles.homepageImage}>
         <Image
-          src="/vines.PNG"
+          src="/vines.png"
           alt="Vines"
           width={310}
           height={310}
-          className={styles.vineImage} />
+          className={styles.vineImage}
+          priority
+        />
       </div>
       
       <div className={styles.centerContent}>
         <div className={styles.logoImage}>
           <Image
-            src="/leaf.PNG"
+            src="/leaf.png"
             alt="Leaf Logo"
             width={300}
             height={300}
-            className={styles.leafImage} />
+            className={styles.leafImage}
+            priority
+          />
         </div>
 
         <Link href="/prebooth" className={styles.start}>
@@ -44,11 +47,12 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <Image
-            src="/instagram.PNG"
+            src="/instagram.png"
             alt="Instagram Logo"
             width={50}
             height={50}
-            className={styles.instaImages} />
+            className={styles.instaImages}
+          />
         </a>
         <a
           href="https://www.linkedin.com/in/thomasle998/"
@@ -56,11 +60,12 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <Image
-            src="/linkedin.PNG"
+            src="/linkedin.png"
             alt="LinkedIn Logo"
             width={60}
             height={60}
-            className={styles.linkedinImages} />
+            className={styles.linkedinImages}
+          />
         </a>
         <a
           href="https://www.youtube.com/@tomaseuu"
@@ -68,11 +73,11 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <Image
-            src="/Youtube.PNG"
-            alt="Youtube Logo"
+            src="/youtube.png"
+            alt="YouTube Logo"
             width={50}
             height={50}
-            className={styles.youtubeImages} 
+            className={styles.youtubeImages}
           />
         </a>
       </div>
