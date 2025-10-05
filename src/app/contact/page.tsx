@@ -42,7 +42,7 @@ export default function Contact() {
     <div>
       <div className={styles.contactPage}>
         <div className={styles.contactName}>
-          <h1>CONTACT</h1>
+          <h1>CONTACT PAGE (DOES NOT WORK YET! COMING SOON!)</h1>
         </div>
 
         <div className={styles.form}>

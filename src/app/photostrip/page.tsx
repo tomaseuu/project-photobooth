@@ -824,7 +824,7 @@ export default function Page() {
             />
           </div>
 
-          <p className={styles.smallTitle}>choose a sticker!</p>
+          <p className={styles.smallTitle}>choose a sticker! (COMING SOON! - DOES NOT WORK!)</p>
           <div className={styles.box}>
             <h2>Themes</h2>
             <p>none</p>
