@@ -830,9 +830,9 @@ export default function Page() {
             <p>none</p>
             <p>cute</p>
             <p>leaf</p>
-            <p>BTS</p>
-            <p>TWICE</p>
-            <p>Miffy</p>
+            <p>stars</p>
+            <p>kpop demon hunters</p>
+            <p>horror</p>
           </div>
           <img
             src="/paintbottles.png"
@@ -1000,6 +1000,14 @@ export default function Page() {
                             3,  // segmentSeconds: use last 3s
                             4   // repetitions: loop 2x => ~6s total
                       );
+
+                      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+                      if (isIOS) {
+                        alert(
+                          "Heads up: iPhone Photos doesn’t support .webm.\n\nTap “Download”, then choose “Save to Files”. You can still share/play it from the Files app or a compatible player. MP4 support coming soon!"
+                        );
+                      }
+
 
                       const url = URL.createObjectURL(blob);
                       const a = document.createElement("a");

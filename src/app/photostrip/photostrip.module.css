@@ -377,7 +377,7 @@
 
 .leaf {
   position: absolute;
-  top: -170px;        /* tweak */
+  top: -170px;        
   right: 35px;
   width: 180px;
   height: auto;
@@ -389,7 +389,8 @@
 .paintbottles {
   position: absolute;            
   left: 50px;              
-  bottom: -150px             
+  bottom: -150px;
+  pointer-events: none;        
 }
 
 .pallete {
