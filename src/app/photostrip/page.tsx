@@ -567,6 +567,21 @@ export default function Page() {
     return canvas.toDataURL("image/png");
   }
 
+function restoreOriginalOrderSafely() {
+  const origRaw = sessionStorage.getItem("luma_photos_original");
+  if (!origRaw) return; 
+
+  try {
+    const orig: unknown = JSON.parse(origRaw);
+    if (Array.isArray(orig) && orig.length > 0) {
+      setPhotos(orig as string[]);
+      sessionStorage.setItem("luma_photos", JSON.stringify(orig));
+    }
+  } catch {
+  }
+}
+
+
   /* Handlers - action buttons */
 
   // go back to capture page, clear session keys
@@ -599,12 +614,7 @@ export default function Page() {
     setStickers([]);
 
     // restore snapshot of original 4 photos
-    try {
-      const origRaw = sessionStorage.getItem("luma_photos_original");
-      const orig: string[] = origRaw ? JSON.parse(origRaw) : [];
-      setPhotos(orig);
-      sessionStorage.setItem("luma_photos", JSON.stringify(orig));
-    } catch {}
+    restoreOriginalOrderSafely();
 
     setShowHint(true);
   };
@@ -675,34 +685,21 @@ export default function Page() {
     }
 
       // build absolute URL to the share page
-      const origin = typeof window !== "undefined" ? window.location.origin : "";
-      const url = `${origin}/share/${token}`;
+    const origin =
+      typeof window !== "undefined"
+        ? window.location.origin
+        : "https://luma-leaf-sepia.vercel.app";
+    const url = `${origin}/share/${token}`;
 
-      let ok = false;
-      try {
-        const head = await fetch(url, { method: "HEAD", cache: "no-store" });
-        ok = head.ok;
-      } catch {}
-      if (!ok) {
-        try {
-          const get = await fetch(url, { method: "GET", cache: "no-store" });
-          ok = get.ok;
-        } catch {}
-      }
-      if (!ok) {
-        alert("The share link couldn’t be verified. Please try again.");
-        return;
-      }
-
-      setShareUrl(url);
-      setQrOpen(true);
-    } catch (e) {
-      console.error(e);
-      alert("Could not create QR link.");
-    } finally {
-      setCreatingQR(false);
-    }
-  };
+    setShareUrl(url);
+    setQrOpen(true);
+  } catch (e) {
+    console.error(e);
+    alert("Could not create QR link.");
+  } finally {
+    setCreatingQR(false);
+  }
+};
 
   // open native color picker
   const openCustomPicker = () => {

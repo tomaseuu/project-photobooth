@@ -15,6 +15,7 @@ export default function Prebooth() {
         <p>you get 3 seconds between each</p>
         <p>be real or be silly, your call</p>
         <p>save and share your best (or weirdest) moment!</p>
+        <p>IMPORTANT INFORMATION: mobile does not work correctly, QR code has some bugs in it</p>
       </div>
       <Link href="/photobooth" className={styles.continue}>
         <h1>CONTINUE</h1>
