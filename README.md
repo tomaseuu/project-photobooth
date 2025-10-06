@@ -39,7 +39,11 @@ This project helped me grow as a full-stack developer by teaching me:
 
 ---
 
+Just Deployed! Come test it :) 
+[luma-leaf-sepia.vercel.app](https://luma-leaf-sepia.vercel.app/)
+
 Summary and Screenshots:  
 📄 [`LumaLeaf.pdf`](https://docs.google.com/document/d/1EzbcYCclthMeQ4jWNswUt_onYVC7IbRtY-KS5UICGik/edit?usp=sharing)
 
 ### Made with love by [Thomas Le](https://github.com/tomaseuu)
+
