@@ -78,3 +78,48 @@
 .actions {
   margin-top: 12px;
 }
+
+/* =============================== */
+/* UNIVERSAL CENTER FIX */
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #d1eac4, #d1eac4);
+  padding: 24px 16px;
+}
+
+/* =============================== */
+/* MOBILE (≤ 600px) */
+@media (max-width: 600px) {
+  .card {
+    width: 92vw;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px 18px;
+    border-radius: 14px;
+  }
+
+  .title {
+    font-size: 22px;
+    margin: 4px 0 6px;
+  }
+
+  .lede {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .primaryBtn, .secondaryBtn {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  .meta {
+    font-size: 13px;
+    color: #777;
+  }
+}

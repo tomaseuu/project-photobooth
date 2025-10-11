@@ -399,3 +399,123 @@
   bottom: -200px;                 
 }
 
+
+/* =============================== */
+/* MOBILE (≤ 600px) */
+@media (max-width: 600px) {
+  .page h1 {
+    font-size: 26px;
+    height: auto;
+    margin: 14px 0 6px;
+  }
+
+  .leaf,
+  .paintbottles,
+  .pallete {
+    display: none !important;
+  }
+
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 18px;
+    max-width: 100%;
+    padding: 8px 12px 48px;
+  }
+
+  .centerPanel { 
+    order: 1; 
+    width: 100%; 
+    display: flex; 
+    justify-content: center; 
+  }
+  .leftPanel { 
+    order: 2; 
+    width: 100%; 
+    align-items: center; 
+  }
+  .rightPanel { 
+    order: 3; 
+    width: 100%; 
+    align-items: center; 
+    padding-top: 0; 
+  }
+
+
+  .strip {
+    width: min(92vw, 460px);
+    padding: 32px 20px 110px;    
+    border-width: 2px;
+  }
+  .slot {
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 1 / 1;
+  }
+  .stripHint { 
+    font-size: 11px; 
+    top: 6px; 
+  }
+
+  .footerBox { 
+    bottom: 18px; 
+    width: calc(100% - 40px); 
+  }
+  .footerTitle { 
+    font-size: 18px; 
+  }
+  .footerDate { 
+    font-size: 11px; 
+  }
+
+  .box,
+  .rightPanel .box,
+  .customRowOutside,
+  .toneBlock {
+    width: min(92vw, 460px);
+  }
+  .box { 
+    padding: 18px 16px; 
+  }
+  .box h2 { 
+    font-size: 18px; 
+    margin-bottom: 10px; 
+  }
+  .box p { 
+    margin: 12px 0; 
+  }
+
+  .smallTitle { 
+    margin: 8px 0 0; 
+  }
+
+  .swatchList { 
+    gap: 12px; 
+  }
+  .swatchRow { 
+    gap: 10px; 
+  }
+  .swatchName { 
+    font-size: 16px; 
+  }
+  .swatchChip { 
+    width: 24px; 
+    height: 24px; 
+    border-radius: 4px; 
+  }
+
+  .toneLabel { 
+    font-size: 13px; 
+  }
+  .toneValue { 
+    font-size: 13px; 
+  }
+
+  .boxButton {
+    width: min(92vw, 460px);
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+}

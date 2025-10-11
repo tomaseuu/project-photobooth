@@ -12,3 +12,12 @@
     color: #333;
   }
   
+
+
+  /* =============================== */
+/* MOBILE (≤ 600px) */
+@media (max-width: 600px) {
+  .container {
+    font-size: 1.4rem;
+  }
+}
