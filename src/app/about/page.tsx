@@ -18,9 +18,9 @@ export default function About() {
           to bring the photo booth experience home.
         </p>
         <p>
-          Whether you're celebrating with friends or just feeling spontaneous,
+          Whether you are celebrating with friends or just feeling spontaneous,
           Photobooth makes it simple to snap, laugh, and print memories that
-          stick with you. It’s more than just photos—it's about connection,
+          stick with you. More than just photos, it is about connection,
           creativity, and letting good times take root.
         </p>
         <p> -------------------------------------------------------- </p>

@@ -137,3 +137,69 @@
 }
 
 /* ================================= */
+
+/* MOBILE LAYOUT */
+@media (max-width: 600px) {
+  .contactPage {
+    padding-top: 72px;
+    padding-bottom: 90px;      
+    overflow-x: hidden;
+  }
+
+  .contactName h1 {
+    font-size: 24px;
+    line-height: 1.2;
+    margin: 0 0 20px;
+    padding: 0 8px;
+  }
+
+  .form {
+    width: 92%;
+    padding: 24px 18px 88px;   
+    max-height: none;           
+    overflow: visible;
+    border-width: 1.5px;
+  }
+
+  .row {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .inputGroup { width: 100%; }
+
+  .contactPage label {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .input[type="text"],
+  .input[type="email"],
+  .textarea {
+    font-size: 16px;
+    padding: 12px 0;
+    margin-bottom: 12px;
+  }
+
+  .input[type="email"] {
+    padding: 12px 0;
+    margin-bottom: 16px;
+  }
+
+  .contactPage textarea {
+    min-height: 110px;
+    max-height: none;
+    padding: 12px 0;
+    margin-bottom: 10px;
+  }
+  
+  .input[type="submit"] {
+    position: static;
+    align-self: flex-end;
+    margin-top: 16px;
+    padding: 14px 22px;
+    font-size: 18px;
+    border-radius: 8px;
+  }
+}

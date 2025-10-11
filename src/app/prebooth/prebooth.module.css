@@ -54,3 +54,44 @@
   background-color: #d1eac4;
   color: rgb(0, 0, 0);
 }
+
+
+/* =============================== */
+/* MOBILE LAYOUT */
+@media (max-width: 600px) {
+  .page {
+    min-height: 100vh;
+    margin-top: 0;
+    padding: 70px 16px calc(80px + env(safe-area-inset-bottom)); 
+    box-sizing: border-box;
+  }
+
+  .textSection {
+    height: auto;
+    max-width: 420px;
+    padding: 0;
+    font-size: 18px;         
+    line-height: 1.4;        
+    gap: -100px;
+  }
+
+  .textSection p {
+    margin: 0;
+    padding: 6px 0;
+  }
+
+  .continue {
+    width: 20vw;             
+    max-width: 320px;
+    min-width: 200px;
+    height: 54px;
+    margin-top: 12px;       
+    border-width: 2px;
+  }
+
+  .continue h1 {
+    font-size: 18px;     
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+}

@@ -149,3 +149,56 @@
 }
 
 /* ================================= */
+
+/* MOBILE LAYOUT */
+@media (max-width: 600px) {
+  .header { position: relative; z-index: 3; }
+  .homepageImage {
+    position: absolute;
+    top: -20px;        
+    right: -16px;  
+    width: 42vw;       
+    max-width: 220px;
+    min-width: 160px;
+    z-index: 1;        
+    pointer-events: none;
+  }
+
+  .page { padding: 3vh 5vw; }
+  .header h1 { font-size: 1.9rem; }
+  .page p {
+    font-size: 1rem;
+    margin-top: 6px;
+    padding: 0 12px;
+    line-height: 1.35;
+  }
+
+  .centerContent { gap: 1.2rem; margin-top: 1.2rem; }
+  .logoImage {
+    width: 68vw;       
+    max-width: 420px;
+    min-width: 220px;
+    margin: 6px auto 0;
+  }
+  .start {
+    width: 56vw;
+    max-width: 200px;
+    min-width: 140px;
+    padding: 0.85em 0;
+    margin: 4px 0 0;   
+  }
+  .start h1 { font-size: 1.15rem; }
+
+  .threeImages {
+    gap: 14px;
+    margin-top: 10px;
+    padding-bottom: 18px;
+  }
+  .instaImages,
+  .linkedinImages,
+  .youtubeImages {
+    width: 28px;
+    height: auto;
+    min-width: 28px;
+  }
+}

@@ -95,3 +95,23 @@
   margin-left: 10px;
   padding: 1rem 0;
 }
+
+/* =============================== */
+
+/* MOBILE LAYOUT */
+@media (max-width: 600px) {
+  .menu {
+    width: 33vw;         
+    left: -75vw;         
+    transition: left 0.4s ease-in-out;
+  }
+
+  .show {
+    left: 0;
+  }
+
+  .flowerImage {
+    width: 35vw;          
+    max-width: 200px;
+  }
+}
