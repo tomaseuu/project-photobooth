@@ -103,7 +103,7 @@
    And nudge the CAPTURED still slightly up so it doesn’t cut foreheads. */
 @media (max-width: 600px) {
   .video {
-    object-position: 50% 90%;              /* 50% center; 70% shows more lower area */
+    object-position: 50% 100%;              /* 50% center; 70% shows more lower area */
     transform: scaleX(-1) translateY(-6%); /* Safari sometimes ignores object-position */
   }
   .canvas {
