@@ -538,3 +538,52 @@
     box-sizing: border-box;   /* ensure no extra width */
   }
 }
+
+
+/* =============== */
+
+/* Sticker theme: vertical, words-only */
+.stickerList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* center the words like your figma */
+  gap: 18px;
+  margin: 8px 0 2px;
+}
+
+.stickerItem {
+  background: none;
+  border: 0;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 15px;                 /* adjust to your figma */
+  font-weight: 400;
+  color: #000;
+  text-transform: lowercase;
+  line-height: 1.1;
+}
+
+.stickerItem:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.stickerItemActive {
+  font-weight: 700;                /* bold the selected one */
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+/* keyboard focus ring for accessibility (invisible otherwise) */
+.stickerItem:focus-visible {
+  outline: 2px dashed #6aa66a;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* mobile tweak if you want tighter spacing */
+@media (max-width: 600px) {
+  .stickerItem { font-size: 24px; }
+  .stickerList { gap: 14px; }
+}

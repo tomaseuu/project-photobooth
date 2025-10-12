@@ -74,6 +74,34 @@ const DEFAULTS = {
   },
 };
 
+type Sticker = {
+  src: string;
+  left: number;   // % from left (0–100)
+  top: number;    // % from top (0–100)
+  width: number;  // % of strip width
+  rot?: number;   // degrees
+  opacity?: number;
+};
+
+const STICKER_SCALE = 1.4;
+
+
+
+const THEMES: Record<string, Sticker[]> = {
+  none: [],
+  leaf: [
+    { src: "/stickers/leaf-1.png", left: 15, top: 4,  width: 18, rot: -18 },
+    { src: "/stickers/leaf-2.png", left: 90, top: 10, width: 16, rot: 12,  opacity: 0.95 },
+    { src: "/stickers/leaf-3.png", left: 12, top: 34, width: 14, rot: -8 },
+    { src: "/stickers/leaf-4.png", left: 90, top: 38, width: 14, rot: 6 },
+    { src: "/stickers/leaf-5.png", left: 15, top: 64, width: 16, rot: 14,  opacity: 0.9 },
+    { src: "/stickers/leaf-6.png", left: 76, top: 90, width: 18, rot: -10 },
+
+    { src: "/stickers/leaf-1.png", left: 88, top: 60, width: 12, rot: 10, opacity: 0.95 },
+  ],
+};
+
+
 /* Component */
 
 export default function Page() {
@@ -95,7 +123,6 @@ export default function Page() {
   const [palette, setPalette] = useState(defaultPalette);
 
   const [photos, setPhotos] = useState(defaultPhotos);
-  const [stickers, setStickers] = useState(defaultStickers);
   
   const [themeColor, setThemeColor] = useState(DEFAULTS.themeColor);    // strip background color
   const [customColor, setCustomColor] = useState(DEFAULTS.customColor); // color picker current value
@@ -164,10 +191,23 @@ export default function Page() {
     } catch {}
   }, []);
 
+  const [stickerTheme, setStickerTheme] = useState<keyof typeof THEMES>(() => {
+    try {
+      return (sessionStorage.getItem("luma_stickers_theme") as any) || "none";
+    } catch {
+      return "none";
+    }
+  });
+
   // theme/custom/tone - reloading them keeps the choice
   useEffect(() => { safeSetSession("luma_theme", themeColor); }, [themeColor]);
   useEffect(() => { safeSetSession("luma_custom", customColor); }, [customColor]);
   useEffect(() => { safeSetSession("luma_tone", JSON.stringify(tone)); }, [tone]);
+
+
+  useEffect(() => {
+    try { sessionStorage.setItem("luma_stickers_theme", stickerTheme); } catch {}
+  }, [stickerTheme]);
 
   /* Memos - fast to re-ender, only when deps change */
 
@@ -304,6 +344,42 @@ export default function Page() {
       Array.from({ length: 4 }, (_, i) => (photosList[i] ? loadImage(photosList[i]) : null))
     );
 
+    // preload stickers once for the whole video
+const stickerSet = THEMES[stickerTheme];
+const stickerImgs = await Promise.all(
+  stickerSet.map(
+    (s) =>
+      new Promise<HTMLImageElement | null>((res) => {
+        const img = new Image();
+        img.onload = () => res(img);
+        img.onerror = () => res(null);
+        img.src = s.src;
+      })
+  )
+);
+  const drawStickersFast = () => {
+    for (let i = 0; i < stickerSet.length; i++) {
+      const s = stickerSet[i];
+      const img = stickerImgs[i];
+      if (!img) continue;
+
+      // same math as drawStickersOnCtx, but fast & using the preload
+      const x = (s.left / 100) * canvasW;
+      const y = (s.top / 100) * canvasH;
+      const w = ((s.width * STICKER_SCALE) / 100) * canvasW;
+      const scale = w / img.width;
+      const h = img.height * scale;
+
+      ctx.save();
+      ctx.globalAlpha = s.opacity ?? 1;
+      ctx.translate(x, y);
+      ctx.rotate(((s.rot ?? 0) * Math.PI) / 180);
+      ctx.drawImage(img, -w / 2, -h / 2, w, h);
+      ctx.restore();
+    }
+  };
+
+
     // recorder
     const stream = canvas.captureStream(fps);
     const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp9")
@@ -438,6 +514,8 @@ export default function Page() {
 
       applyOverlaysAndFooter();
 
+      drawStickersFast();
+
       // eslint-disable-next-line no-await-in-loop
       await new Promise((r) => setTimeout(r, frameDelay));
     }
@@ -449,6 +527,44 @@ export default function Page() {
     });
     return blob;
   }
+
+  /* STEP 7A: draw stickers on a canvas */
+  async function drawStickersOnCtx(
+    ctx: CanvasRenderingContext2D,
+    canvasW: number,
+    canvasH: number,
+    stickers: Sticker[]
+  ) {
+    if (!stickers.length) return;
+
+    const load = (src: string) => new Promise<HTMLImageElement | null>((res) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = () => res(null);
+      img.src = src;
+    });
+
+    const imgs = await Promise.all(stickers.map((s) => load(s.src)));
+
+    stickers.forEach((s, i) => {
+      const img = imgs[i];
+      if (!img) return;
+      const x = (s.left / 100) * canvasW;
+      const y = (s.top / 100) * canvasH;
+      const w = ((s.width * STICKER_SCALE) / 100) * canvasW;
+      const scale = w / img.width;
+      const h = img.height * scale;
+
+      ctx.save();
+      ctx.globalAlpha = s.opacity ?? 1;
+      ctx.translate(x, y);
+      ctx.rotate(((s.rot ?? 0) * Math.PI) / 180);
+      ctx.drawImage(img, -w / 2, -h / 2, w, h);
+      ctx.restore();
+    });
+  }
+
+
 
 
   /* in web code, a Blob = “big chunk of binary data.”
@@ -559,6 +675,8 @@ export default function Page() {
   }
   ctx.globalCompositeOperation = "source-over";
 
+  await drawStickersOnCtx(ctx, canvasW, canvasH, THEMES[stickerTheme]);
+
     // --- footer ---
   ctx.filter = "none";                 // keep text crisp (no photo filters)
   const FOOTER_H = footer_height;           // just for readability
@@ -629,9 +747,6 @@ function restoreOriginalOrderSafely() {
       }
     );
     setPalette("#ffffff");
-
-    // stickers
-    setStickers([]);
 
     // restore snapshot of original 4 photos
     restoreOriginalOrderSafely();
@@ -785,6 +900,9 @@ function restoreOriginalOrderSafely() {
   const footerTextColor = isDark(themeColor) ? "#fff" : "#000";
 
 
+
+
+
   /* Render */
 
   return (
@@ -843,14 +961,25 @@ function restoreOriginalOrderSafely() {
 
           <p className={styles.smallTitle}>(COMING SOON!)</p>
           <div className={styles.box}>
-            <h2>Stickers</h2>
-            <p>none</p>
-            <p>cute</p>
-            <p>leaf</p>
-            <p>stars</p>
-            <p>kpop demon hunters</p>
-            <p>horror</p>
+          <h2>Stickers</h2>
+
+          {/* vertical text-only list */}
+          <div className={styles.stickerList} role="list">
+            {(["none", "leaf"] as (keyof typeof THEMES)[]).map((key) => (
+              <button
+                key={key}
+                type="button"
+                role="listitem"
+                className={`${styles.stickerItem} ${stickerTheme === key ? styles.stickerItemActive : ""}`}
+                onClick={() => setStickerTheme(key)}
+                aria-pressed={stickerTheme === key}
+              >
+                {key === "none" ? "none" : "leaf"}
+              </button>
+            ))}
           </div>
+        </div>
+
           <img
             src="/paintbottles.png"
             alt=""
@@ -903,6 +1032,26 @@ function restoreOriginalOrderSafely() {
                 </div>
               </div>
             ))}
+
+            {/* STEP 6: preview stickers */}
+            {THEMES[stickerTheme].map((s, i) => (
+              <img
+                key={i}
+                src={s.src}
+                alt=""
+                className={styles.sticker}
+                draggable={false}
+                style={{
+                  position: "absolute",   
+                  left: `${s.left}%`,
+                  top: `${s.top}%`,
+                  width: `${s.width * STICKER_SCALE}%`,
+                  opacity: s.opacity ?? 1,
+                  transform: `translate(-50%, -50%) rotate(${s.rot ?? 0}deg)`,
+                }}
+              />
+            ))}
+
             <div className={styles.footerBox} style={{ color: footerTextColor }}>
              <div className={styles.footerTitle}>{footerTitle}</div>
              <div className={styles.footerDate}>{footerDate}</div>
