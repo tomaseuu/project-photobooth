@@ -16,6 +16,20 @@ import { useRouter } from "next/navigation";
 import CameraCanvas, { CameraHandle, FilterKey } from "../../components/camera";
 import Image from "next/image";
 
+/* ===== SAFE SESSION HELPERS (iOS Private mode) ===== */
+declare global {
+  interface Window {
+    __LUMA_PHOTOS__?: string[];
+  }
+}
+function safeSetSession(key: string, value: string) {
+  try { sessionStorage.setItem(key, value); } catch { /* iOS private mode */ }
+}
+function safeRemoveSession(key: string) {
+  try { sessionStorage.removeItem(key); } catch {}
+}
+/* ================================================ */
+
 export default function Page() {
   /* hooks: routers + refs */
   const router = useRouter();
@@ -60,17 +74,18 @@ export default function Page() {
     - if something goes wrong, show an error. 
     - always reset the file input at the end
     */
-
     try {
       const dataUrls = await Promise.all(files.map(fileToDataURL));
-      sessionStorage.removeItem("luma_preroll_all");
-      sessionStorage.setItem("luma_photos", JSON.stringify(dataUrls));
-      router.push("/photostrip"); 
+      safeRemoveSession("luma_preroll_all");
+      safeSetSession("luma_photos", JSON.stringify(dataUrls));
+      // memory fallback so SPA nav still works if sessionStorage is blocked
+      window.__LUMA_PHOTOS__ = dataUrls;
     } catch (e) {
       console.error(e);
       alert("Couldn't read one of the files. Please try again.");
     } finally {
       event.target.value = ""; // clean up input
+      router.push("/photostrip"); // ALWAYS navigate
     }
   };
 
@@ -89,24 +104,35 @@ export default function Page() {
     if (!api) return;
 
     setRunning(true);
-    let shots: string[] = [];
     try {
-      shots =
+      const shots =
         countdown === "5"
           ? await api.start5()
           : countdown === "10"
           ? await api.start10()
           : await api.start3();
+
+      if (shots.length === 4) {
+        safeSetSession("luma_photos", JSON.stringify(shots));
+        // memory fallback in case sessionStorage write failed
+        window.__LUMA_PHOTOS__ = shots;
+
+        const preroll = (() => {
+          try { return sessionStorage.getItem("luma_preroll_all"); }
+          catch { return null; }
+        })();
+        if (!preroll) {
+          console.warn("No preroll found after live session.");
+        }
+      } else {
+        alert("We didn’t get photos. Please allow camera and try again.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Camera failed or permission was denied.");
     } finally {
       setRunning(false);
-    }
-    if (shots.length === 4) {
-      sessionStorage.setItem("luma_photos", JSON.stringify(shots));
-      const preroll = sessionStorage.getItem("luma_preroll_all");
-      if (!preroll) {
-        console.warn("No preroll found after live session.");
-      }
-      router.push("/photostrip");
+      router.push("/photostrip"); // ALWAYS navigate
     }
   };
 

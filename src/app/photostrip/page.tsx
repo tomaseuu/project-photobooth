@@ -15,6 +15,18 @@ import { useRouter } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react"; 
 import styles from "./photostrip.module.css";
 
+/* ===== SAFE SESSION HELPERS (iOS Private mode) ===== */
+declare global {
+  interface Window { __LUMA_PHOTOS__?: string[]; }
+}
+function safeSetSession(key: string, value: string) {
+  try { sessionStorage.setItem(key, value); } catch {}
+}
+function safeRemoveSession(key: string) {
+  try { sessionStorage.removeItem(key); } catch {}
+}
+/* ================================================ */
+
 /* simple color presets the user can click */
 
 const PRESETS = [
@@ -119,35 +131,39 @@ export default function Page() {
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem("luma_photos");
-      const list = raw ? JSON.parse(raw) : [];
+      const list = raw ? JSON.parse(raw) : (window.__LUMA_PHOTOS__ ?? []);
       setPhotos(list);
 
       // take a snapshot of the original order
       const hasOriginal = sessionStorage.getItem("luma_photos_original");
       if (!hasOriginal && list.length) {
-        sessionStorage.setItem("luma_photos_original", JSON.stringify(list));
+        safeSetSession("luma_photos_original", JSON.stringify(list));
       }
     } catch {}
 
     // restore color + custom + tone from previous session in this tab
-    const t = sessionStorage.getItem("luma_theme");
-    if (t) setThemeColor(t);
+    try {
+      const t = sessionStorage.getItem("luma_theme");
+      if (t) setThemeColor(t);
+    } catch {}
 
-    const c = sessionStorage.getItem("luma_custom");
-    if (c) setCustomColor(c);
+    try {
+      const c = sessionStorage.getItem("luma_custom");
+      if (c) setCustomColor(c);
+    } catch {}
 
-    const toneRaw = sessionStorage.getItem("luma_tone");
-    if (toneRaw) {
-      try { setTone(JSON.parse(toneRaw)); 
-      } 
-      catch {}
-    }
+    try {
+      const toneRaw = sessionStorage.getItem("luma_tone");
+      if (toneRaw) {
+        try { setTone(JSON.parse(toneRaw)); } catch {}
+      }
+    } catch {}
   }, []);
 
   // theme/custom/tone - reloading them keeps the choice
-  useEffect(() => { sessionStorage.setItem("luma_theme", themeColor); }, [themeColor]);
-  useEffect(() => { sessionStorage.setItem("luma_custom", customColor); }, [customColor]);
-  useEffect(() => { sessionStorage.setItem("luma_tone", JSON.stringify(tone)); }, [tone]);
+  useEffect(() => { safeSetSession("luma_theme", themeColor); }, [themeColor]);
+  useEffect(() => { safeSetSession("luma_custom", customColor); }, [customColor]);
+  useEffect(() => { safeSetSession("luma_tone", JSON.stringify(tone)); }, [tone]);
 
   /* Memos - fast to re-ender, only when deps change */
 
@@ -575,7 +591,7 @@ function restoreOriginalOrderSafely() {
     const orig: unknown = JSON.parse(origRaw);
     if (Array.isArray(orig) && orig.length > 0) {
       setPhotos(orig as string[]);
-      sessionStorage.setItem("luma_photos", JSON.stringify(orig));
+      safeSetSession("luma_photos", JSON.stringify(orig));
     }
   } catch {
   }
@@ -586,8 +602,8 @@ function restoreOriginalOrderSafely() {
 
   // go back to capture page, clear session keys
   const handleNew = () => {
-    sessionStorage.removeItem("luma_photos");
-    sessionStorage.removeItem("luma_photos_original");
+    safeRemoveSession("luma_photos");
+    safeRemoveSession("luma_photos_original");
     router.push("/photobooth");
   };
 
@@ -597,9 +613,9 @@ function restoreOriginalOrderSafely() {
     setThemeColor(DEFAULTS.themeColor);
     setCustomColor(DEFAULTS.customColor);
     setTone(DEFAULTS.tone);
-    sessionStorage.setItem("luma_theme", DEFAULTS.themeColor);
-    sessionStorage.setItem("luma_custom", DEFAULTS.customColor);
-    sessionStorage.setItem("luma_tone", JSON.stringify(DEFAULTS.tone));
+    safeSetSession("luma_theme", DEFAULTS.themeColor);
+    safeSetSession("luma_custom", DEFAULTS.customColor);
+    safeSetSession("luma_tone", JSON.stringify(DEFAULTS.tone));
 
     setFilter("none");
     setTones(
@@ -752,7 +768,7 @@ function restoreOriginalOrderSafely() {
       const arr = [...prev];
       const [moved] = arr.splice(from, 1);
       arr.splice(i, 0, moved);
-      sessionStorage.setItem("luma_photos", JSON.stringify(arr)); // only working order
+      safeSetSession("luma_photos", JSON.stringify(arr)); // only working order
       return arr;
     });
   };
