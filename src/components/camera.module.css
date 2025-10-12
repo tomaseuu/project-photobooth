@@ -108,6 +108,6 @@
 
 /* Optional: only apply the nudge on small screens */
 @media (max-width: 600px) {
-  .video { object-position: 50% 10%; }
-  .canvas { object-position: 50% 45%; }
+  .video { object-position: 50% 30%; }
+  .canvas { object-position: 50% 30%; }
 }
