@@ -841,9 +841,9 @@ function restoreOriginalOrderSafely() {
             />
           </div>
 
-          <p className={styles.smallTitle}>choose a sticker! (COMING SOON! - DOES NOT WORK!)</p>
+          <p className={styles.smallTitle}>(COMING SOON!)</p>
           <div className={styles.box}>
-            <h2>Themes</h2>
+            <h2>Stickers</h2>
             <p>none</p>
             <p>cute</p>
             <p>leaf</p>
