@@ -96,18 +96,17 @@
 }
 
 
-/* ================================= */
 /* MOBILE ≤ 600px */
-
-/* On phones, push LIVE preview down a little so faces land mid-frame.
-   And nudge the CAPTURED still slightly up so it doesn’t cut foreheads. */
 @media (max-width: 600px) {
   .video {
-    object-position: 50% 100%;              /* 50% center; 70% shows more lower area */
-    transform: scaleX(-1) translateY(-6%); /* Safari sometimes ignores object-position */
+    height: 100%;                         /* make sure it fills the frame */
+    object-fit: cover;
+    object-position: 50% 50%;             /* keep, but Safari may ignore */
+    transform: scaleX(-1) translateY(-24%); /* <-- ADJUST THIS NUMBER */
   }
   .canvas {
-    object-position: 50% 45%;              /* saved photo a touch higher than preview */
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 45%;
   }
 }
-
