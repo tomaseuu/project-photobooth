@@ -908,6 +908,9 @@ function restoreOriginalOrderSafely() {
   return (
     <div className={styles.page}>
       <h1>LUMA LEAF</h1>
+      <p className={styles.dimensionsNote}>
+        *preview dimensions may differ slightly from final download
+      </p>
 
       <div className={styles.layout}>
         {/* LEFT: Palette + Custom + Themes */}

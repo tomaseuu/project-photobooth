@@ -587,3 +587,14 @@
   .stickerItem { font-size: 24px; }
   .stickerList { gap: 14px; }
 }
+
+.dimensionsNote {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-style: italic;
+  color: #555;
+  text-align: center;
+  margin-top: -6px;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
