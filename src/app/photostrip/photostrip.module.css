@@ -518,4 +518,23 @@
     font-size: 16px;
     padding: 12px 14px;
   }
+
+    .box { 
+    width: min(92vw, 460px);
+    padding: 18px 16px;
+    box-sizing: border-box;   /* important */
+  }
+
+  /* let tone rows fill the box content area */
+  .toneBlock {
+    width: 100%;              /* instead of min(92vw, 460px) */
+    margin: 10px 0 18px;
+  }
+
+  .toneBlock input[type="range"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;   /* ensure no extra width */
+  }
 }
