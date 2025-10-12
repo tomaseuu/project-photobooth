@@ -4,6 +4,10 @@ import React, { useState } from "react";
 import styles from "./contact.module.css";
 import emailjs from "emailjs-com";
 
+const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
+const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string;
+const publicKey  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     firstname: "",
@@ -35,35 +39,39 @@ export default function Contact() {
       return;
     }
 
+    if (!serviceId || !templateId || !publicKey) {
+      setStatus("Email service is not configured. Please try again later.");
+      console.error("EmailJS env vars missing at build time:", { serviceId, templateId, publicKey });
+      return;
+    }
+
     setStatus("");
     setIsSending(true);
 
     // MUST match your EmailJS template fields
     const templateParams = {
       from_name: `${formData.firstname} ${formData.lastname}`,
+      reply_to: formData.email,
+      message: formData.message,
+
       firstname: formData.firstname,
       lastname: formData.lastname,
       email: formData.email,
-      message: formData.message,
-      reply_to: formData.email,
+
     };
 
-    try {
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string;
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
-
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
-
-      setStatus("Thank you! Your message has been sent.");
-      setFormData({ firstname: "", lastname: "", email: "", message: "" });
-    } catch (err) {
-      console.error(err);
-      setStatus("Oops—something went wrong. Please try again.");
-    } finally {
-      setIsSending(false);
-    }
-  };
+  try {
+        const res = await emailjs.send(serviceId, templateId, templateParams, publicKey);
+        console.log("EmailJS response:", res);
+        setStatus("Thank you! Your message has been sent.");
+        setFormData({ firstname: "", lastname: "", email: "", message: "" });
+      } catch (err) {
+        console.error("EmailJS error:", err);
+        setStatus("Oops—something went wrong. Please try again.");
+      } finally {
+        setIsSending(false);
+      }
+    };
 
   return (
     <div>
