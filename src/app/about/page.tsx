@@ -28,7 +28,7 @@ export default function About() {
           Developer: Thomas Le
         </p>
         <p>
-          Graphic Designer: Haxin Huang
+          Graphic Designer: Haixin Huang
         </p>
       </div>
       <div className={styles.aboutImage}>
