@@ -106,8 +106,15 @@
   opacity: 1;
 }
 
-/* Optional: only apply the nudge on small screens */
+/* MOBILE CAMERA ADJUSTMENT */
 @media (max-width: 600px) {
-  .video { object-position: 50% 70%; }
-  .canvas { object-position: 50% 45%; }
+  /* Live preview — move slightly UP (was 70%) */
+  .video {
+    object-position: 50% 60%;
+  }
+
+  /* Captured still — keep a touch higher to avoid cutting */
+  .canvas {
+    object-position: 50% 45%;
+  }
 }
