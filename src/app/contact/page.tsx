@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./contact.module.css";
+import emailjs from "emailjs-com";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -11,20 +12,19 @@ export default function Contact() {
     message: "",
   });
   const [status, setStatus] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // basic validation
     if (
       !formData.firstname ||
       !formData.lastname ||
@@ -35,14 +35,41 @@ export default function Contact() {
       return;
     }
 
-    setStatus("Thank you for your message!");
+    setStatus("");
+    setIsSending(true);
+
+    // MUST match your EmailJS template fields
+    const templateParams = {
+      from_name: `${formData.firstname} ${formData.lastname}`,
+      firstname: formData.firstname,
+      lastname: formData.lastname,
+      email: formData.email,
+      message: formData.message,
+      reply_to: formData.email,
+    };
+
+    try {
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string;
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
+
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+
+      setStatus("Thank you! Your message has been sent.");
+      setFormData({ firstname: "", lastname: "", email: "", message: "" });
+    } catch (err) {
+      console.error(err);
+      setStatus("Oops—something went wrong. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
     <div>
       <div className={styles.contactPage}>
         <div className={styles.contactName}>
-          <h1>CONTACT PAGE (DOES NOT WORK YET! COMING SOON!)</h1>
+          <h1>Contact</h1>
         </div>
 
         <div className={styles.form}>
@@ -77,6 +104,7 @@ export default function Contact() {
                 />
               </div>
             </div>
+
             <label htmlFor="email" className="label">
               <b>Email Address</b>
             </label>
@@ -101,8 +129,16 @@ export default function Contact() {
               value={formData.message}
               onChange={handleChange}
               required
-            ></textarea>
-            <input className={styles.input} type="submit" value="submit" />
+            />
+
+            <button
+              className={styles.input}
+              type="submit"
+              disabled={isSending}
+              aria-busy={isSending}
+            >
+              {isSending ? "Sending..." : "Send"}
+            </button>
           </form>
 
           {status && <p>{status}</p>}
