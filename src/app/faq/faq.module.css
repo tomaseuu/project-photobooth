@@ -1,23 +1,86 @@
-/* FAQ MODULE CSS */
+/* FAQ Page */
+.faqPage {
+  background-color: #fff;
+  color: #333;
+  font-family: "Inter", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+}
 
+.title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 40px;
+  font-family: "Playfair Display", serif;
+}
 
-/* FAQ */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-size: 2rem;
-    background-color: #f9f9f9;
-    color: #333;
+/* FAQ List */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 90%;
+  max-width: 900px;
+}
+
+.faqItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  border: 1px solid #ddd;
+  padding: 20px 30px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.question {
+  font-weight: bold;
+  flex: 1;
+  max-width: 220px;
+}
+
+.answer {
+  flex: 3;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Contact Note */
+.contactNote {
+  margin-top: 50px;
+  font-size: 1.1rem;
+  color: #333;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Footer */
+.footer {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .faqItem {
+    flex-direction: column;
+    gap: 10px;
   }
-  
 
+  .question {
+    max-width: none;
+  }
 
-  /* =============================== */
-/* MOBILE (≤ 600px) */
-@media (max-width: 600px) {
-  .container {
-    font-size: 1.4rem;
+  .answer {
+    font-size: 0.95rem;
+  }
+
+  .contactNote {
+    font-size: 1rem;
   }
 }
