@@ -110,9 +110,10 @@
 @media (max-width: 600px) {
   /* Live preview — move slightly UP (was 70%) */
 .video {
-  object-position: 50% 55%;
+  object-position: 50% 40%; /* way higher — focuses more on face/head */
 }
+
 .canvas {
-  object-position: 50% 45%;
+  object-position: 50% 38%; /* captured photo matches roughly same framing */
 }
 }
