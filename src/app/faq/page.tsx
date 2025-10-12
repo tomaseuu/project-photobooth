@@ -34,10 +34,6 @@ export default function FAQ() {
       a: "No account needed! Photobooth keeps things simple, just open, snap, and save.",
     },
     {
-      q: "Does it work on mobile?",
-      a: "Yep! Photobooth works on phones, tablets, and computers. Just allow camera access and you are good to go. BUT we recommend to use your laptop!!",
-    },
-    {
       q: "Can I customize my photo strip?",
       a: "Yes! You can drag, resize, and reorder photos to create your own custom photostrip before exporting it.",
     },
@@ -45,8 +41,14 @@ export default function FAQ() {
       q: "Who designed these amazing graphics?",
       a: "All the wonderful graphics and visuals in Photobooth were designed by Haixin Huang!",
     },
+    {
+      q: "Does Luma Leaf work on Safari or mobile devices?",
+      a: "Yes, it works — but with a few limitations. While you can still take and upload photos just fine, some advanced features like the Video GIF export do not fully work on Safari due to browser restrictions. We recommend using Google Chrome for the best experience. (P.S. we are working on a mobile app version soon to make everything smoother on mobile devices!)",
+    },
   ];
 
+  Q: 
+A: 
   return (
     <main className={styles.faqPage}>
       <h1 className={styles.title}>FAQ</h1>
