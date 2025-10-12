@@ -1,59 +1,40 @@
 /* CAMERA MODULE CSS */
 
+
 /* Camera Container */
 .container {
   position: relative;
   text-align: center;
   padding: 0;
-
-  /* IMPORTANT: let CameraCanvas fill the parent .cameraFrame box */
-  width: 100%;
-  height: 100%;
 }
 
 /* the stage defines the overlay area (video-sized box) */
 .stage {
-  position: relative;
+  position: relative;  
   width: 100%;
-  height: 100%;          /* <- critical so children can use height:100% */
-  overflow: hidden;
 }
 
 /* ================================= */
+
 /* Live View Layers */
 .video {
-  /* fill the stage */
   width: 100%;
-  height: 100%;
-
+  height: auto;         
+  object-fit: cover;
   display: block;
   border: none;
-
-  /* show camera like a full-bleed background */
-  object-fit: cover;
-
-  /* MOBILE FACE NUDGE: push live preview down a bit */
-  object-position: 50% 70%;
 }
 
-/* the captured canvas sits exactly on top of the video */
 .canvas {
-  position: absolute;
+  position: absolute;   
   inset: 0;
   pointer-events: none;
-  opacity: 0;           /* hidden except for flash */
+  opacity: 0;           
   z-index: 0;
-
-  /* match sizing to video */
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  /* Slightly higher so saved stills don’t crop foreheads */
-  object-position: 50% 45%;
 }
 
 /* ================================= */
+
 /* Thumbnails strip */
 .photoStrip {
   display: flex;
@@ -71,14 +52,18 @@
 }
 
 /* ================================= */
+
 /* Overlay For Countdown Numbers */
 .overlay {
-  position: absolute;
-  inset: 0;
+  position: absolute;  
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 0;          
   z-index: 1;
   pointer-events: none;
 }
@@ -87,14 +72,18 @@
   font-size: 60px;
   font-weight: 800;
   color: #fff;
-  margin-top: 0;
+  margin-top: 0;        
 }
 
 /* ================================= */
-/* Flash overlay (white blink) */
+
+/* Flash overlay (white blink) */ 
 .flashCover {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: #fff;
   opacity: 0;
   transition: opacity 180ms ease;
@@ -106,14 +95,19 @@
   opacity: 1;
 }
 
-/* MOBILE CAMERA ADJUSTMENT */
+
+/* ================================= */
+/* MOBILE ≤ 600px */
+
+/* On phones, push LIVE preview down a little so faces land mid-frame.
+   And nudge the CAPTURED still slightly up so it doesn’t cut foreheads. */
 @media (max-width: 600px) {
-  /* Live preview — move slightly UP (was 70%) */
-.video {
-  object-position: 50% 20%; /* way up — should mostly show head & maybe some shoulders */
+  .video {
+    object-position: 50% 20%;              /* 50% center; 70% shows more lower area */
+    transform: scaleX(-1) translateY(-6%); /* Safari sometimes ignores object-position */
+  }
+  .canvas {
+    object-position: 50% 45%;              /* saved photo a touch higher than preview */
+  }
 }
 
-.canvas {
-  object-position: 50% 20%; /* match still photo to live preview */
-}
-}
