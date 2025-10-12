@@ -35,7 +35,7 @@ export default function FAQ() {
     },
     {
       q: "Does it work on mobile?",
-      a: "Yep! Photobooth works smoothly on phones, tablets, and computers. Just allow camera access and you are good to go.",
+      a: "Yep! Photobooth works on phones, tablets, and computers. Just allow camera access and you are good to go. BUT we recommend to use your laptop!!",
     },
     {
       q: "Can I customize my photo strip?",

@@ -17,7 +17,11 @@ import styles from "./photostrip.module.css";
 
 /* ===== SAFE SESSION HELPERS (iOS Private mode) ===== */
 declare global {
-  interface Window { __LUMA_PHOTOS__?: string[]; }
+  interface Window { 
+    __LUMA_PHOTOS__?: string[];
+    __LUMA_LIVE__?: boolean;        // <-- added (flag set by Photobooth on live capture)
+    __LUMA_PREROLL__?: string[][];  // optional fallback if you ever store preroll in-memory
+  }
 }
 function safeSetSession(key: string, value: string) {
   try { sessionStorage.setItem(key, value); } catch {}
@@ -986,19 +990,36 @@ function restoreOriginalOrderSafely() {
                   className={styles.boxButton}
                   onClick={async () => {
                     try {
-                      // Check raw preroll JSON first
-                      const raw = sessionStorage.getItem("luma_preroll_all");
-                      const parsed: string[][] = raw ? JSON.parse(raw) : [];
-                      const totalFrames = parsed.reduce((n, g) => n + (g?.length || 0), 0);
+                      // Check raw preroll JSON first (with fallbacks)
+                      let parsed: string[][] = [];
+                      try {
+                        const raw = sessionStorage.getItem("luma_preroll_all");
+                        parsed = raw ? JSON.parse(raw) : [];
+                      } catch {}
+                      // optional in-memory preroll fallback if you ever set it elsewhere
+                      // @ts-ignore
+                      if ((!parsed || !parsed.length) && Array.isArray(window.__LUMA_PREROLL__)) {
+                        // @ts-ignore
+                        parsed = window.__LUMA_PREROLL__;
+                      }
 
-                      if (!parsed.length || totalFrames === 0) {
+                      const totalFrames = (parsed || []).reduce((n, g) => n + (g?.length || 0), 0);
+
+                      // detect "live" session via flag (sessionStorage OR memory)
+                      const isLive =
+                        (() => { try { return !!sessionStorage.getItem("luma_live"); } catch { return false; } })() ||
+                        // @ts-ignore
+                        !!window.__LUMA_LIVE__;
+
+                      // If NOT live at all (i.e., uploaded photos), block; otherwise allow even if preroll is missing
+                      if (!isLive) {
                         alert(
                           "Sorry, the Video GIF option is only available for live camera sessions (not uploaded photos)."
                         );
                         return;
                       }
 
-                      // only now load the images to build the video
+                      // only now load the images to build the video (will gracefully use stills if no preroll)
                       const groups = await loadPrerollFramesAll();
 
                       const blob = await buildPhotostripVideoWebM(
@@ -1020,7 +1041,6 @@ function restoreOriginalOrderSafely() {
                           "Heads up: iPhone Photos doesn’t support .webm.\n\nTap “Download”, then choose “Save to Files”. You can still share/play it from the Files app or a compatible player. MP4 support coming soon!"
                         );
                       }
-
 
                       const url = URL.createObjectURL(blob);
                       const a = document.createElement("a");

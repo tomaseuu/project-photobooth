@@ -20,6 +20,7 @@ import Image from "next/image";
 declare global {
   interface Window {
     __LUMA_PHOTOS__?: string[];
+    __LUMA_LIVE__?: boolean;  // <-- added (flag for live sessions)
   }
 }
 function safeSetSession(key: string, value: string) {
@@ -76,6 +77,12 @@ export default function Page() {
     */
     try {
       const dataUrls = await Promise.all(files.map(fileToDataURL));
+
+      // this is an upload session, not live
+      safeRemoveSession("luma_live");
+      // @ts-ignore
+      delete window.__LUMA_LIVE__;
+
       safeRemoveSession("luma_preroll_all");
       safeSetSession("luma_photos", JSON.stringify(dataUrls));
       // memory fallback so SPA nav still works if sessionStorage is blocked
@@ -116,6 +123,11 @@ export default function Page() {
         safeSetSession("luma_photos", JSON.stringify(shots));
         // memory fallback in case sessionStorage write failed
         window.__LUMA_PHOTOS__ = shots;
+
+        // mark this as a LIVE session (lets /photostrip enable VIDEO GIF even if preroll couldn't be saved)
+        safeSetSession("luma_live", "1");
+        // @ts-ignore
+        window.__LUMA_LIVE__ = true;
 
         const preroll = (() => {
           try { return sessionStorage.getItem("luma_preroll_all"); }
