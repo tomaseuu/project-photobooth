@@ -27,6 +27,7 @@
 .textSection p {
   margin: 0;
   padding: 8px 0;
+  color: #58611F;
 }
 
 .continue {
@@ -35,12 +36,14 @@
   align-items: center;
   width: 170px;
   height: 50px;
-  border: 2px solid black;
   cursor: pointer;
   transition: background-color 0.3s ease;
   text-decoration: none;
   color: black;
   margin-top: 40px;
+  background: #FFFAF1;
+  border-radius: 5px;
+  border: 2px solid #58611F;  
 }
 
 .continue h1 {
@@ -48,10 +51,11 @@
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 500;
+  color: #58611F;  
 }
 
 .continue:hover {
-  background-color: #d1eac4;
+  background-color: #A7C484;
   color: rgb(0, 0, 0);
 }
 

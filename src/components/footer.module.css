@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(255, 255, 255);
+  background-color: #FFFAF1;
   color: rgb(0, 0, 0);
   width: 100%;
   height: 0.2rem;
@@ -39,6 +39,7 @@
     text-align: center;
     position: fixed;
     bottom: 0;
+
   }
 
   .footer a {

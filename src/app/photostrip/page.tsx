@@ -1227,15 +1227,15 @@ function restoreOriginalOrderSafely() {
                 marginTop: 12,
                 padding: 16,
                 width: 240,
-                background: "#fff",
-                border: "1px solid #000",
+                background: "#f9f9f9",
+                border: "1px solid #58611F",
                 borderRadius: 14,
                 textAlign: "center",
                 boxShadow: "0 6px 16px rgba(0,0,0,.1)",
               }}
             >
               <div style={{ fontWeight: 700, marginBottom: 6 }}>QR Code</div>
-              <div style={{ fontSize: 13, color: "#555", marginBottom: 10 }}>
+              <div style={{ fontSize: 13, color: "#58611F", marginBottom: 10 }}>
                 Scan to view & download your photo strip.
               </div>
 
@@ -1243,7 +1243,7 @@ function restoreOriginalOrderSafely() {
                 style={{
                   display: "inline-block",
                   padding: 8,
-                  background: "#fff",
+                  background: "#f9f9f9",
                   borderRadius: 12,
                   boxShadow: "0 6px 16px rgba(0,0,0,.12)",
                   marginBottom: 10,
@@ -1260,19 +1260,19 @@ function restoreOriginalOrderSafely() {
                       setTimeout(() => setCopyOk(false), 1500);
                     } catch {}
                   }}
-                  style={{ width: "100%", borderRadius: 999 }}
+                  style={{ width: "100%", borderRadius: 12 }}
                 >
                   {copyOk ? "Copied!" : "Copy Link"}
                 </button>
 
-              <div style={{ fontSize: 12, color: "#666", marginTop: 8 }}>
+              <div style={{ fontSize: 12, color: "#58611F", marginTop: 8 }}>
                 This link will expire in 10 minutes
               </div>
 
               <button
                 className={styles.boxButton}
                 onClick={() => setQrOpen(false)}
-                style={{ width: "100%", marginTop: 8 }}
+                style={{ width: "100%", marginTop: 8, borderRadius: 12 }}
               >
                 Close
               </button>

@@ -1,6 +1,6 @@
 /* FAQ Page */
 .faqPage {
-  background-color: #fff;
+  background-color: #FFFAF1;
   color: #333;
   font-family: "Inter", sans-serif;
   min-height: 100vh;
@@ -15,6 +15,7 @@
   font-weight: 600;
   margin-bottom: 40px;
   font-family: "Playfair Display", serif;
+  color: #58611F;
 }
 
 /* FAQ List */
@@ -24,6 +25,8 @@
   gap: 30px;
   width: 90%;
   max-width: 900px;
+  color: #58611F;
+  
 }
 
 .faqItem {
@@ -34,7 +37,7 @@
   border: 1px solid #ddd;
   padding: 20px 30px;
   border-radius: 8px;
-  background: #fff;
+  background-color: #FFFAF1;
 }
 
 .question {
@@ -45,8 +48,8 @@
 
 .answer {
   flex: 3;
-  color: #555;
   line-height: 1.6;
+  color: #58611F;
 }
 
 /* Contact Note */
@@ -56,6 +59,7 @@
   color: #333;
   text-align: center;
   font-weight: 500;
+  color: #58611F;
 }
 
 /* Footer */

@@ -12,6 +12,7 @@
   font-size: 35px;
   height: 10vh;
   margin: 0;
+  color: #58611F;
 }
 
 /* ================================= */
@@ -40,6 +41,7 @@
   gap: 22px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
+  color: #58611F;
 }
 
 .leftPanel {
@@ -54,6 +56,7 @@
 .smallTitle {
   margin: 0;
   font-style: italic;
+  color: #58611F;
 }
 
 /* ================================= */
@@ -61,7 +64,7 @@
 /* Box (Palette / Themes / Tones) */
 
 .box {
-  background-color: #d1eac4;
+  background-color: #C7E098;
   border: 0;
   border-radius: 0;
   padding: 25px 20px;
@@ -75,11 +78,13 @@
   font-weight: 700;
   margin: 0 0 15px;
   text-align: center;
+  color: #58611F;
 }
 
 .box p {
   margin: 18px 0;
   cursor: pointer;
+  color: #58611F;
 }
 
 .box p:hover {
@@ -123,11 +128,13 @@
   align-items: center;
   gap: 8px;
   margin: 6px 0;
+  
 }
 
 .swatchName {
   font-size: 15px;
   user-select: none;
+  color: #58611F;
 }
 
 /* ================================= */
@@ -140,6 +147,7 @@
   border: 0;
   cursor: pointer;
   padding: 0;
+  color:#58611F;
 }
 
 .swatchChip {
@@ -147,11 +155,12 @@
   z-index: 1;
   width: 20px;
   height: 20px;
-  border: 1px solid #00000080;
+  border: 1px solid #58611F;
   border-radius: 3px;
   display: inline-block;
   transition: transform 140ms ease, box-shadow 140ms ease;
   will-change: transform;
+  background:#f9f9f9;
 }
 
 .swatchChipBtn:hover .swatchChip,
@@ -291,12 +300,13 @@
   transform: translateX(-50%);
   font-size: 12px;
   font-style: italic;
-  color: #333;
+  color: #58611F;
   background: rgba(255, 255, 255, 0.8);
   padding: 4px 8px;
   border: 1px solid #ddd;
   border-radius: 6px;
   pointer-events: none;
+  color: #58611F;
 }
 
 /* ================================= */
@@ -304,17 +314,19 @@
 /* Right Action Buttons */
 
 .boxButton {
-  background: #fff;
+  background: #FFFAF1;
+  border-radius: 5px;
   border: 1px solid #000;
   cursor: pointer;
   font-size: 16px;
   padding: 10px 14px;
   text-align: center;
   width: 160px;
+  color: #58611F;
 }
 
 .boxButton:hover:not(:disabled) {
-  background-color: #f0f0f0;
+  background-color: #A7C484;
 }
 
 .boxButton:disabled {
@@ -330,7 +342,7 @@
   margin: 0 0 8px;
   font-size: 13px;
   font-style: italic;
-  color: #555;
+  color: #58611F;
   opacity: 0.9;
   user-select: none;
 }
@@ -377,7 +389,7 @@
 
 .leaf {
   position: absolute;
-  top: -170px;        
+  top: -120px;        
   right: 35px;
   width: 180px;
   height: auto;
@@ -559,9 +571,9 @@
   font-family: "Times New Roman", Times, serif;
   font-size: 15px;                 /* adjust to your figma */
   font-weight: 400;
-  color: #000;
   text-transform: lowercase;
   line-height: 1.1;
+  color: #58611F;
 }
 
 .stickerItem:hover {

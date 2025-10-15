@@ -4,19 +4,20 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: linear-gradient(180deg, #d1eac4, #d1eac4);
+  background-color: #d1eac4;;
 }
 
 /* Card */
 .card {
   width: 360px;
   max-width: 94vw;
-  background: #fff;
+  background: #FFFAF1;
   border: 1px solid #eee;
   border-radius: 16px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   padding: 20px;
   text-align: center;
+  color:#58611F;
 }
 
 /* Typography */
@@ -24,16 +25,19 @@
   margin: 6px 0 10px;
   font-size: 20px;
   font-weight: 700;
+  color:#58611F;
 }
 
 .lede {
   margin-top: 0;
   margin-bottom: 8px;
+  color:#58611F;
 }
 
 .loading {
-  color: #333;
+  color:#58611F;
   margin: 8px 0;
+  
 }
 
 .error {
@@ -61,22 +65,25 @@
   display: inline-block;
   margin: 8px 0 12px;
   padding: 10px 14px;
-  background: #fff;
+  background: #FFFAF1;
   border: 1px solid #000;
   border-radius: 999px;
   cursor: pointer;
+  color:#58611F;
 }
 
 .secondaryBtn {
   padding: 8px 12px;
   border: 1px solid #000;
-  background: #fff;
+  background: #FFFAF1;
   border-radius: 10px;
   cursor: pointer;
+  color:#58611F;
 }
 
 .actions {
   margin-top: 12px;
+  color:#58611F;
 }
 
 /* =============================== */
@@ -87,8 +94,23 @@
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(180deg, #d1eac4, #d1eac4);
+  background-color: #D1EAC4;
   padding: 24px 16px;
+  color:#58611F;
+}
+
+/* Smooth color change */
+.primaryBtn,
+.secondaryBtn {
+  transition: color 180ms ease;
+}
+
+/* Hover / keyboard focus */
+.primaryBtn:hover,
+.primaryBtn:focus-visible,
+.secondaryBtn:hover,
+.secondaryBtn:focus-visible {
+  background-color: #d1eac4;
 }
 
 /* =============================== */

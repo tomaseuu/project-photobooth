@@ -15,7 +15,7 @@
   justify-content: flex-start;
   align-items: center;
   color: rgb(251, 251, 251);
-  background-color: #ffffff;
+  background-color: #FFFAF1;
   overflow: hidden;
 }
 
@@ -28,7 +28,7 @@
   font-size: 30px;
   text-align: center;
   margin-bottom: 45px;
-  color: black;
+  color: #58611F;
   font-family: "Times New Roman", Times, serif;
   font-weight: normal;
   padding: 5px;
@@ -74,7 +74,7 @@
 .contactPage label,
 .contactPage input,
 .contactPage textarea {
-  color: #000000;
+  color: #58611F;
 }
 
 .contactPage label {
@@ -122,7 +122,7 @@
   position: absolute;
   bottom: 20px;
   right: 20px;
-  background-color: #d1eac4;
+  background-color: #A7C484;
   color: black;
   padding: 20px 45px;
   font-size: 25px;
@@ -130,10 +130,11 @@
   border: 1px solid #000000;
   transition: background-color 0.3s ease;
   right: 22px;
+  border-radius: 5px;
 }
 
 .input[type="submit"]:hover {
-  background-color: #b7ceab;
+  background-color: #70a94f;
 }
 
 /* ================================= */

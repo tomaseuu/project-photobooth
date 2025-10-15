@@ -18,6 +18,7 @@
   font-size: 35px;
   height: 10vh;
   margin: 0;
+  color: #58611F;
 }
 
 .content{
@@ -27,6 +28,7 @@
   box-sizing: border-box;
   position: relative;
   z-index: 1;
+  color: #58611F;
 }
 
 .container {                            /* CameraCanvas Container */
@@ -36,8 +38,8 @@
   height: 80vh;
   font-size: 2rem;
   background-color: #f9f9f9;
-  color: #333;
   margin-top: -55px;
+  color: #58611F;
 }
 
 /* ================================= */
@@ -53,20 +55,25 @@
   justify-content: space-between;        /* left group vs dropdown */
   align-items: center;
   box-sizing: border-box;
-  transform: translateX(-25px);          /* nudge to the right or left */
+  transform: translateX(-25px);          
+  color: #58611F;
 }
 
 .leftGroup {
   display: flex;
   gap: 10px;
+  color: #58611F;
 }
 
 .boxButton {
-  border: 1px solid black;
-  background: white;
+  border: 1px solid #58611F;  
+  background: #FFFAF1;
   padding: 8px 12px;
   font-size: 16px;
   cursor: pointer;
+  color: #58611F;
+  border-radius: 5px;
+  
 }
 
 .boxButton:hover {
@@ -74,11 +81,14 @@
 }
 
 .dropdown {
-  border: 1px solid black;
+  border: 1px solid #58611F; 
   padding: 8px 12px;
   font-size: 16px;
   cursor: pointer;
   transform: translateX(60px);
+  color: #58611F;
+  background: #FFFAF1;
+  border-radius: 5px;
 }
 
 /* ================================= */
@@ -109,24 +119,27 @@
 }
 
 .filterBox {
-  background-color: #d1eac4;
+  background-color: #C7E098;
   padding: 25px;
   padding-top: 30px;
   font-size: 16px;
   width: 180px;
   min-height: 300px;
-  text-align: center;
+  text-align: center;   /*#FFFAF1;*/
+    
 }
 
 .filterBox h2 {
   font-size: 20px;
   margin: 0 0 15px;
   font-weight: 700;
+  color: #58611F;
 }
 
 .filterBox p {
   margin: 25px 0; 
   cursor: pointer;
+  color: #58611F;
 }
 
 .filterBox p:hover {
@@ -141,7 +154,7 @@
 }
 
 .cameraFrame {
-  border: 4px solid black;
+  border: 2px solid #58611F; 
   width: 720px;
   aspect-ratio: 4 / 3;
   margin: 0;                 /* no auto-centering; the column handles it */
@@ -166,8 +179,9 @@
   appearance: none;
   -webkit-appearance: none;
   background: #fff;
-  border: 2px solid #000;      
+  border: 2px solid #58611F;      
   box-sizing: border-box;
+  border-radius: 5px;
 
   /* sizing – mirrors home’s min/max approach */
   width: 30vw;
@@ -182,7 +196,7 @@
   font-weight: 300;            
   font-size: 1.5rem;
   line-height: 1;
-  color: #000;
+  color: #58611F;
   text-align: center;
   display: inline-flex;
   align-items: center;
@@ -194,7 +208,7 @@
 }
 
 .start:hover {
-  background-color: #d1eac4;
+  background-color: #A7C484;
 }
 
 /* ================================= */
