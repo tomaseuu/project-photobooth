@@ -15,7 +15,7 @@ export default function FAQ() {
     },
     {
       q: "Does Photobooth store photos?",
-      a: "Nope! Photos are stored locally in your browser for privacy. Once you close or clear your session, your photos are gone—so make sure to download your favorites before you leave!",
+      a: "Nope! Photos are stored locally in your browser for privacy. When you use the QR code feature, your photo strip is temporarily saved on the server for 10 minutes—just long enough to share it with friends. After that, it automatically expires and is permanently deleted. Make sure to download your favorites before you leave!",
     },
     {
       q: "What image formats can I upload?",

@@ -675,16 +675,15 @@
 }
 
 :global(html.ll-dark) .page[data-page="photostrip"] .qrCard {
-  background: #FFFAF1;                 /* light cream card */
+  background: #FFFAF1;                
   border-color: #FFF3DE;
-  color: #58611F;                       /* readable text on light card */
+  color: #58611F;                       
   box-shadow: 0 10px 24px rgba(0,0,0,.25);
 }
 
-/* Make QR card buttons filled and visible */
 :global(html.ll-dark) .page[data-page="photostrip"] .qrCard .boxButton {
-  background: #7A814A;                  /* olive fill */
-  color: #FFF3DE;                        /* cream text */
+  background: #7A814A;             
+  color: #FFF3DE;                  
   border: 1px solid #FFF3DE;
 }
 

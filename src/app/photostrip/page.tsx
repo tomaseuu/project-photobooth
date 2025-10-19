@@ -1235,8 +1235,19 @@ function restoreOriginalOrderSafely() {
                 boxShadow: "0 6px 16px rgba(0,0,0,.1)",
               }}
             >
-              <div style={{ fontWeight: 700, marginBottom: 6 }}>QR Code</div>
-              <div style={{ fontSize: 13, color: "#58611F", marginBottom: 10 }}>
+              <div style={
+                { 
+                fontWeight: 700, 
+                marginBottom: 6 
+              }
+                }>QR Code
+              </div>
+              <div style={
+                { fontSize: 13, 
+                color: "#58611F", 
+                marginBottom: 10 
+                }
+                }>
                 Scan to view & download your photo strip.
               </div>
 
