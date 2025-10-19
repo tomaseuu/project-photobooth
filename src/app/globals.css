@@ -26,3 +26,46 @@ body {
 .wrapper {
   flex: 1;
 }
+
+
+/* ===== Luma Leaf Global Dark Theme ===== */
+html.ll-dark body {
+  background-color: #4B4441;
+  transition: background-color 0.4s ease;
+}
+
+html.ll-dark {
+  background-color: #4B4441; 
+  color: #FFF3DE;          
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html.ll-dark a { 
+  color: #FFF3DE; 
+}
+
+html.ll-dark button,
+html.ll-dark input,
+html.ll-dark select,
+html.ll-dark textarea {
+  color: #FFF3DE;
+}
+
+html.ll-dark footer,
+html.ll-dark aside {
+  background-color: #4B4441;
+  color: #FFF3DE;
+}
+html.ll-dark nav{
+  background-color: #7A814A;
+}
+
+html.ll-dark [data-page="home"] {
+  background-color: #4B4441; 
+}
+
+html.ll-dark [data-page="home"] h1,
+html.ll-dark [data-page="home"] p {
+  color: #FFF3DE;
+  background-color: none;
+}

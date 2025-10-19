@@ -88,3 +88,34 @@
     font-size: 1rem;
   }
 }
+
+/* Dark Mode */
+:global(html.ll-dark) .faqPage[data-page="faq"] {
+  background-color: #4B4441;   /* page brown */
+  color: #FFF3DE;               /* default text */
+  transition: background-color .35s ease, color .35s ease;
+}
+
+:global(html.ll-dark) .faqPage[data-page="faq"] .title {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .faqPage[data-page="faq"] .list {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .faqPage[data-page="faq"] .faqItem {
+  background-color: transparent;    
+  border: 1px solid #FFF3DE;    /* cream border */
+}
+
+
+:global(html.ll-dark) .faqPage[data-page="faq"] .question,
+:global(html.ll-dark) .faqPage[data-page="faq"] .answer {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .faqPage[data-page="faq"] .contactNote,
+:global(html.ll-dark) .faqPage[data-page="faq"] .footer {
+  color: #FFF3DE;
+}

@@ -75,7 +75,7 @@ export default function Contact() {
 
   return (
     <div>
-      <div className={styles.contactPage}>
+      <div data-page="contact" className={styles.contactPage}>
         <div className={styles.contactName}>
           <h1>Contact</h1>
         </div>

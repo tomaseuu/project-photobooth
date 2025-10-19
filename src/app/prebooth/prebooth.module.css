@@ -99,3 +99,30 @@
     letter-spacing: 0.2px;
   }
 }
+
+/* Dark mode */
+
+:global(html.ll-dark) .page[data-page="prebooth"] {
+  background-color: #4B4441;          
+  color: #FFF3DE;                       
+  transition: background-color .35s ease, color .35s ease;
+}
+
+:global(html.ll-dark) .page[data-page="prebooth"] .textSection,
+:global(html.ll-dark) .page[data-page="prebooth"] .textSection p {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="prebooth"] .continue {
+  background: transparent;                 
+  border: 2px solid #FFF3DE;          
+  color: #FFF3DE;                     
+}
+
+:global(html.ll-dark) .page[data-page="prebooth"] .continue h1 {
+  color: #FFF3DE;                   
+}
+
+:global(html.ll-dark) .page[data-page="prebooth"] .continue:hover {
+  background-color: #b3a182;   
+}

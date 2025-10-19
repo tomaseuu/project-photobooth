@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
+    <div data-page="home" className={styles.page}>
       <div className={styles.header}>
         <h1>LUMA LEAF</h1>
         <p>A personal photobooth for you and your favorite people</p>

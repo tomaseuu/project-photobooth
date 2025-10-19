@@ -50,7 +50,7 @@ export default function FAQ() {
   Q: 
 A: 
   return (
-    <main className={styles.faqPage}>
+    <main data-page="faq" className={styles.faqPage}>
       <h1 className={styles.title}>FAQ</h1>
 
       <div className={styles.list}>

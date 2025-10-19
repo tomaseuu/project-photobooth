@@ -209,3 +209,19 @@
     min-width: 28px;
   }
 }
+
+
+/* Dark Mode */
+:global(html.ll-dark) [data-page="home"] .start {
+  background-color: transparent; 
+  border: 2px solid #FFF3DE;    
+}
+
+:global(html.ll-dark) [data-page="home"] .start h1 {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) [data-page="home"] .start:hover {
+  background-color: #b3a182; 
+  color: #4B4441;             
+}

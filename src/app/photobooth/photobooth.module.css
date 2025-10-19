@@ -473,3 +473,59 @@
   }
 }
 
+/* Dark Mode */
+
+:global(html.ll-dark) .page[data-page="photobooth"] h1 {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photobooth"] .boxButton,
+:global(html.ll-dark) .page[data-page="photobooth"] .dropdown {
+  background: transparent;
+  color: #FFF3DE;
+  border: 1px solid #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photobooth"] .boxButton:hover {
+  background: #98835f;
+}
+
+:global(html.ll-dark) .page[data-page="photobooth"] .cameraFrame {
+  border-color: #FFF3DE;
+  background: transparent;
+}
+
+:global(html.ll-dark) .page[data-page="photobooth"] .content {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photobooth"] .filterBox {
+  background-color: #7A814A;
+}
+
+:global(html.ll-dark) .page[data-page="photobooth"] .filterBox h2,
+:global(html.ll-dark) .page[data-page="photobooth"] .filterBox p,
+:global(html.ll-dark) .page[data-page="photobooth"] .filters,
+:global(html.ll-dark) .page[data-page="photobooth"] .chooseText {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photobooth"] .start {
+  background: transparent;
+  color: #FFF3DE;
+  border: 2px solid #FFF3DE;
+}
+:global(html.ll-dark) .page[data-page="photobooth"] .start:hover {
+  background-color: #b3a182;    
+}
+
+:global(html.ll-dark) .page[data-page="photobooth"] .container {
+  background: transparent;
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photobooth"] .butterflies,
+:global(html.ll-dark) .page[data-page="photobooth"] .butterflies2{
+  filter: invert(90%) sepia(10%) saturate(300%) hue-rotate(7deg) brightness(100%) contrast(92%);
+  mix-blend-mode: lighten; 
+}

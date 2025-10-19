@@ -145,3 +145,49 @@
     color: #777;
   }
 }
+
+
+/* Dark Mode */
+
+:global(html.ll-dark) .page[data-page="share"] {
+  background-color: #4B4441;
+  color: #FFF3DE;
+  transition: background-color .35s ease, color .35s ease;
+}
+
+:global(html.ll-dark) .page[data-page="share"] .card {
+  background: #7A814A;
+  color: #FFF3DE;
+  border: 1px solid #FFF3DE;
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+
+
+:global(html.ll-dark) .page[data-page="share"] .title,
+:global(html.ll-dark) .page[data-page="share"] .lede,
+:global(html.ll-dark) .page[data-page="share"] .loading,
+:global(html.ll-dark) .page[data-page="share"] .actions {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="share"] .meta {
+  color: #E7E0D2;
+}
+
+:global(html.ll-dark) .page[data-page="share"] .image {
+  border-color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="share"] .primaryBtn,
+:global(html.ll-dark) .page[data-page="share"] .secondaryBtn {
+  background: #7A814A;
+  color: #FFF3DE;
+  border: 1px solid #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="share"] .primaryBtn:hover,
+:global(html.ll-dark) .page[data-page="share"] .primaryBtn:focus-visible,
+:global(html.ll-dark) .page[data-page="share"] .secondaryBtn:hover,
+:global(html.ll-dark) .page[data-page="share"] .secondaryBtn:focus-visible {
+  filter: brightness(1.05);
+}

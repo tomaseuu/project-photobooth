@@ -204,3 +204,42 @@
     border-radius: 8px;
   }
 }
+
+ /* Dark Mode */
+:global(html.ll-dark) .contactPage[data-page="contact"] {
+  background-color: #4B4441;  
+  color: #FFF3DE;              
+  transition: background-color .35s ease, color .35s ease;
+}
+
+:global(html.ll-dark) .contactPage[data-page="contact"] .contactName h1 {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .contactPage[data-page="contact"] .form {
+  border: 1.7px solid #FFF3DE;
+}
+
+:global(html.ll-dark) .contactPage[data-page="contact"] label,
+:global(html.ll-dark) .contactPage[data-page="contact"] input,
+:global(html.ll-dark) .contactPage[data-page="contact"] textarea {
+  color: #FFF3DE;
+  border-color: #FFF3DE;
+}
+
+:global(html.ll-dark) .contactPage[data-page="contact"] .input[type="text"],
+:global(html.ll-dark) .contactPage[data-page="contact"] .input[type="email"],
+:global(html.ll-dark) .contactPage[data-page="contact"] .textarea {
+  border-bottom: 1.5px solid #FFF3DE;
+  color: #FFF3DE;
+  background: transparent;
+}
+
+:global(html.ll-dark) .contactPage[data-page="contact"] .input[type="submit"] {
+  background-color: #7A814A;
+  color: #FFF3DE;
+  border: 1px solid #FFF3DE;
+}
+:global(html.ll-dark) .contactPage[data-page="contact"] .input[type="submit"]:hover {
+  background-color: #585d36;
+}

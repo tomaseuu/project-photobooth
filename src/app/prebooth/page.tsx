@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function Prebooth() {
   return (
-    <div className={styles.page}>
+    <div data-page="prebooth" className={styles.page}>
       <div className={styles.textSection}>
         <p>hey there, welcome to Luma Leaf 🍃</p>
         <p>the camera will take 4 shots, one after the other</p>

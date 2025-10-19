@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 export default function About() {
   return (
-    <div className={styles.page}>
+    <div data-page="about" className={styles.page}>
       <div className={styles.textSection}>
         <h2>Learn More</h2>
         <h1>About Us</h1>

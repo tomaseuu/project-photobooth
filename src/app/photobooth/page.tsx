@@ -154,7 +154,7 @@ export default function Page() {
   };
 
   return (
-    <div className={styles.page}>
+    <div data-page="photobooth" className={styles.page}>
       {/* Decorative Images */}
       <Image
         src="/butterflies.png"

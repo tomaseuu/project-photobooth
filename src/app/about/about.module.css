@@ -135,3 +135,23 @@
     height: auto;
   }
 }
+
+/* Dark Mode */
+:global(html.ll-dark) .page[data-page="about"] {
+  background-color: #4B4441;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+:global(html.ll-dark) .page[data-page="about"] .textSection,
+:global(html.ll-dark) .page[data-page="about"] .textSection h1,
+:global(html.ll-dark) .page[data-page="about"] .textSection h2,
+:global(html.ll-dark) .page[data-page="about"] .textSection p {
+  color: #FFFAF1;
+}
+
+:global(html.ll-dark) .page[data-page="about"] .aboutImage {
+  background-color: transparent;
+  filter: invert(94%) sepia(8%) saturate(384%) 
+  hue-rotate(9deg) brightness(100%) contrast(93%);
+  mix-blend-mode: lighten;
+}

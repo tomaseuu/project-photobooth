@@ -76,7 +76,7 @@ export default function SharePage() {
     remaining != null ? Math.max(1, Math.ceil(remaining / 60)) : null;
 
   return (
-    <main className={styles.page}>
+    <main data-page="share" className={styles.page}>
       <div className={styles.card}>
         <h1 className={styles.title}>Your Photostrip!</h1>
 

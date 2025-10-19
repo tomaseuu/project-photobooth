@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import styles from "./navbar.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import ThemeToggle from "./themeToggle";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -33,6 +34,7 @@ export default function Navbar() {
         <Link href="/contact" onClick={() => setOpen(false)}>
           contact
         </Link>
+        <ThemeToggle />
         <div className={styles.flowerImage}>
           <Image
             src="/navflower.png"

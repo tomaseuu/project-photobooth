@@ -117,3 +117,16 @@
     max-width: 200px;
   }
 }
+
+/* Dark Mode */
+:global(html.ll-dark) .hamburger span {
+  background-color: #FFF3DE;
+}
+
+:global(html.ll-dark) .flowerImage {
+  filter: brightness(0.9) contrast(1.05);
+}
+
+:global(html.ll-dark) .menu a:hover {
+  color: #C5BBA1;          
+}

@@ -906,7 +906,7 @@ function restoreOriginalOrderSafely() {
   /* Render */
 
   return (
-    <div className={styles.page}>
+    <div data-page="photostrip" className={styles.page}>
       <h1>LUMA LEAF</h1>
       <p className={styles.dimensionsNote}>
         *preview dimensions may differ slightly from final download
@@ -1223,6 +1223,7 @@ function restoreOriginalOrderSafely() {
           {/* QR card */}
           {qrOpen && shareUrl && (
             <div
+              className={styles.qrCard} 
               style={{
                 marginTop: 12,
                 padding: 16,

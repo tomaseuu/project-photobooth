@@ -610,3 +610,85 @@
   margin-bottom: 12px;
   opacity: 0.9;
 }
+
+
+/* Dark Mode */
+
+:global(html.ll-dark) .page[data-page="photostrip"] {
+  background-color: #4B4441;
+  transition: background-color .35s ease;
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] h1 {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .leftPanel,
+:global(html.ll-dark) .page[data-page="photostrip"] .rightPanel,
+:global(html.ll-dark) .page[data-page="photostrip"] .smallTitle,
+:global(html.ll-dark) .page[data-page="photostrip"] .hint {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .box {
+  background-color: #7A814A;
+}
+:global(html.ll-dark) .page[data-page="photostrip"] .box h2,
+:global(html.ll-dark) .page[data-page="photostrip"] .box p {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .swatchName,
+:global(html.ll-dark) .page[data-page="photostrip"] .swatchChipBtn {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .swatchChip {
+  border-color: #FFF3DE;
+  background: transparent;
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .toneLabel,
+:global(html.ll-dark) .page[data-page="photostrip"] .toneValue {
+  color: #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .boxButton {
+  background: transparent;
+  color: #FFF3DE;
+  border: 1px solid #FFF3DE;
+}
+:global(html.ll-dark) .page[data-page="photostrip"] .boxButton:hover {
+  background-color: #b3a182;   
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .paintbottles,
+:global(html.ll-dark) .page[data-page="photostrip"] .pallete {
+  filter: invert(90%) sepia(10%) saturate(300%) hue-rotate(7deg)
+          brightness(100%) contrast(92%);
+  mix-blend-mode: lighten;
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .dimensionsNote {
+  color: #FFF3DE !important; 
+  opacity: 0.9;           
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .qrCard {
+  background: #FFFAF1;                 /* light cream card */
+  border-color: #FFF3DE;
+  color: #58611F;                       /* readable text on light card */
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+}
+
+/* Make QR card buttons filled and visible */
+:global(html.ll-dark) .page[data-page="photostrip"] .qrCard .boxButton {
+  background: #7A814A;                  /* olive fill */
+  color: #FFF3DE;                        /* cream text */
+  border: 1px solid #FFF3DE;
+}
+
+:global(html.ll-dark) .page[data-page="photostrip"] .qrCard .boxButton:hover,
+:global(html.ll-dark) .page[data-page="photostrip"] .qrCard .boxButton:focus-visible {
+  background: #4c5032;   
+}

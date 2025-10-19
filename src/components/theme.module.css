@@ -1,0 +1,11 @@
+.btn {
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #58611F; /* olive */
+  transition: transform 0.2s ease;
+}
+.btn:hover { transform: scale(1.1); }
+.btn:focus { outline: none; box-shadow: none; }
