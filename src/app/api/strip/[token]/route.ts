@@ -8,23 +8,22 @@ Notes:
 - For prod, move storage + rate counters to KV/Redis.
 */
 
+
 import { NextResponse } from "next/server";
 
-// Force Node (globals won't persist on Edge)
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 type Item = { dataUrl: string; expiresAt: number };
-const GENERIC_404 = false; // set true to always return 404 for invalid/expired
+const GENERIC_404 = false;
 
-// Photostrip store (token -> Item)
+// ---- in-memory stores (dev only)
 function getStore(): Map<string, Item> {
   const g = globalThis as any;
   if (!g.__STRIP_STORE__) g.__STRIP_STORE__ = new Map<string, Item>();
   return g.__STRIP_STORE__ as Map<string, Item>;
 }
 
-// Simple per-IP fixed-window rate limiter (GET only)
 type RL = { count: number; windowStart: number };
 function getRateMap(): Map<string, RL> {
   const g = globalThis as any;
@@ -32,8 +31,8 @@ function getRateMap(): Map<string, RL> {
   return g.__STRIP_RATE_MAP__ as Map<string, RL>;
 }
 
-const RATE_LIMIT_MAX = 60;          // testing: 3 requests per window
-const RATE_LIMIT_WINDOW_MS = 60_000; // testing: 10s window
+const RATE_LIMIT_MAX = 60;
+const RATE_LIMIT_WINDOW_MS = 60_000;
 
 function getClientIp(req: Request): string {
   const xff = req.headers.get("x-forwarded-for");
@@ -45,57 +44,46 @@ function checkRateLimit(ip: string) {
   const map = getRateMap();
   const now = Date.now();
   const key = `rl:get:${ip}`;
-  const current = map.get(key);
+  const cur = map.get(key);
 
-  if (!current) {
+  if (!cur) {
     map.set(key, { count: 1, windowStart: now });
     return { ok: true, remaining: RATE_LIMIT_MAX - 1, resetMs: RATE_LIMIT_WINDOW_MS };
   }
 
-  const elapsed = now - current.windowStart;
+  const elapsed = now - cur.windowStart;
   if (elapsed > RATE_LIMIT_WINDOW_MS) {
-    current.count = 1;
-    current.windowStart = now;
+    cur.count = 1;
+    cur.windowStart = now;
     return { ok: true, remaining: RATE_LIMIT_MAX - 1, resetMs: RATE_LIMIT_WINDOW_MS };
   }
 
-  current.count += 1;
-  if (current.count > RATE_LIMIT_MAX) {
+  cur.count += 1;
+  if (cur.count > RATE_LIMIT_MAX) {
     const resetMs = RATE_LIMIT_WINDOW_MS - elapsed;
     return { ok: false, retryAfterSec: Math.ceil(resetMs / 1000), resetMs };
   }
 
-  const resetMs = RATE_LIMIT_WINDOW_MS - elapsed;
-  return { ok: true, remaining: RATE_LIMIT_MAX - current.count, resetMs };
+  return { ok: true, remaining: RATE_LIMIT_MAX - cur.count, resetMs: RATE_LIMIT_WINDOW_MS - elapsed };
 }
 
-// Normalize ctx.params whether it's an object or a Promise (some Next versions)
-async function normalizeParams(
-  ctx:
-    | { params: { token: string } }
-    | { params: Promise<{ token: string }> }
-): Promise<{ token?: string }> {
-  const p: any = (ctx as any)?.params;
-  if (p && typeof p.then === "function") return await p;
+// Normalize ctx.params whether it's an object or a Promise (runtime-safe)
+async function normalizeParams(ctx: any): Promise<{ token?: string }> {
+  const p = ctx?.params;
+  if (p && typeof p.then === "function") return await p; // Promise case (some Next versions during dev)
   return p ?? {};
 }
 
 /* ---------- Handler ---------- */
 
-export async function GET(
-  req: Request,
-  ctx:
-    | { params: { token: string } }
-    | { params: Promise<{ token: string }> }
-) {
-  // Rate limit by IP
+export async function GET(req: Request, ctx: any) {
+  // Rate limit
   const ip = getClientIp(req);
   const rl = checkRateLimit(ip);
   if (!rl.ok) {
-    return new NextResponse(JSON.stringify({ error: "Too many requests" }), {
+    return NextResponse.json({ error: "Too many requests" }, {
       status: 429,
       headers: {
-        "Content-Type": "application/json",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
         "Retry-After": String(rl.retryAfterSec ?? 60),
@@ -106,13 +94,11 @@ export async function GET(
     });
   }
 
-  // Handle params whether object or promise
   const { token } = await normalizeParams(ctx);
   if (!token) {
-    return new NextResponse(JSON.stringify({ error: "Bad request" }), {
+    return NextResponse.json({ error: "Bad request" }, {
       status: 400,
       headers: {
-        "Content-Type": "application/json",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
       },
@@ -123,13 +109,11 @@ export async function GET(
   const item = store.get(token);
   const now = Date.now();
 
-  // Not found at all
   if (!item) {
     const body = GENERIC_404 ? { error: "Not found" } : { error: "Not found or expired" };
-    return new NextResponse(JSON.stringify(body), {
+    return NextResponse.json(body, {
       status: 404,
       headers: {
-        "Content-Type": "application/json",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
         "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
@@ -138,15 +122,13 @@ export async function GET(
     });
   }
 
-  // Found but expired
   if (item.expiresAt <= now) {
     store.delete(token);
     const status = GENERIC_404 ? 404 : 410;
     const body = GENERIC_404 ? { error: "Not found" } : { error: "Expired" };
-    return new NextResponse(JSON.stringify(body), {
+    return NextResponse.json(body, {
       status,
       headers: {
-        "Content-Type": "application/json",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
         "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
@@ -155,14 +137,12 @@ export async function GET(
     });
   }
 
-  // Success
   const expiresInSeconds = Math.max(0, Math.floor((item.expiresAt - now) / 1000));
-  return new NextResponse(
-    JSON.stringify({ dataUrl: item.dataUrl, expiresInSeconds }),
+  return NextResponse.json(
+    { dataUrl: item.dataUrl, expiresInSeconds },
     {
       status: 200,
       headers: {
-        "Content-Type": "application/json",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
         "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
