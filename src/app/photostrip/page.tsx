@@ -15,14 +15,14 @@ import { useRouter } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react"; 
 import styles from "./photostrip.module.css";
 
-export const OUTER = 30;
-export const GAP = 20;
-export const PW = 600;   // photo width
-export const PH = 450;   // photo height
-export const FOOT = 120;
+const OUTER = 30;
+const GAP = 20;
+const PW = 600;   // photo width
+const PH = 450;   // photo height
+const FOOT = 120;
 
-export const CANVAS_W = PW + OUTER * 2;
-export const CANVAS_H = OUTER * 2 + 4 * PH + 3 * GAP + FOOT;
+const CANVAS_W = PW + OUTER * 2;
+const CANVAS_H = OUTER * 2 + 4 * PH + 3 * GAP + FOOT;
 
 declare global {
   interface Window { 
