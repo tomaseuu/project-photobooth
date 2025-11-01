@@ -1,14 +1,3 @@
-/*
-GET /api/strip/[token]
-- fetch a saved photostrip by token
-- in-memory temp store + per-IP rate limit on this GET
-
-Notes:
-- This is fine for dev, not production (serverless instances won't share memory).
-- For prod, move storage + rate counters to KV/Redis.
-*/
-
-
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";

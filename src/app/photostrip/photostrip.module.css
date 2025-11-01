@@ -15,6 +15,19 @@
   color: #58611F;
 }
 
+.previewShell {
+  position: relative;
+  width: calc(var(--cw) * var(--scale));
+  height: calc(var(--ch) * var(--scale));
+}
+
+.previewShell > .strip {
+  transform: scale(var(--scale));
+  transform-origin: top left;
+}
+
+
+
 /* ================================= */
 
 /* 3-Column Layout */
@@ -228,19 +241,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
+  box-sizing: border-box;
   width: 340px;
-  padding: 45px 40px 150px;
-  border: 2px solid #000;
+  height: auto;
+  aspect-ratio: 600 / 1890; 
+  overflow: hidden;
+  padding: var(--outer) var(--outer) calc(var(--outer) + var(--foot));
+  outline: 2px solid var(--border-color, #000);
   background: var(--theme-color, #fff);
 }
 
 .slot {
-  width: 95%;
-  max-width: 320px;
+  width: 600px;          /* = PW */
+  height: 450px;         /* = PH */
   aspect-ratio: 1 / 1;
   background: #f3f3f3;
-  border: 1.5px solid #000000;
+  border: 2.5px solid #3a3a3a;
   overflow: hidden;
   transition: outline-color 120ms ease, box-shadow 120ms ease;
 }
@@ -352,12 +369,12 @@
 /* Footer inside the strip */
 .footerBox {
   position: absolute;
-  bottom: 24px;
   left: 50%;
+  bottom: var(--outer);
   transform: translateX(-50%);
-  width: calc(100% - 80px); 
+  width: calc(100% - var(--outer) * 2);
   text-align: center;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 .footerTitle {
@@ -377,11 +394,6 @@
   color: #222;
   opacity: 0.9;
   color: inherit;
-}
-
-/* reduce bottom pad a touch since we’re adding a footer element */
-.strip {
-  padding: 45px 40px 130px;
 }
 
 /* ================================= */
@@ -464,7 +476,7 @@
   .slot {
     width: 100%;
     max-width: none;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 600 / 450;
   }
   .stripHint { 
     font-size: 11px; 
